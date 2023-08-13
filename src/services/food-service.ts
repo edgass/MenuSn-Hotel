@@ -1,5 +1,5 @@
 import db from "../firebase.config";
-import { getFirestore, collection, addDoc,query, where, getDocs, doc  } from "firebase/firestore";
+import { getFirestore, collection, addDoc,query, where, getDocs, deleteDoc, doc  } from "firebase/firestore";
 import { HotelModel } from "../models/hotel-model";
 import { CategoryModel } from "../models/category";
 
@@ -20,8 +20,9 @@ export class FoodService{
          var data= await resp.where('hotelId' ,'==', 'HOnjOpu9qarlYU1SZzny').get();
      
              data.docs.forEach(item=>{
-                 console.log(item.data())
-               elements = [...elements,item.data()] as Element[];
+             
+               elements = [...elements,[item.data(),item.id]] as Element[];
+               
           //  var element : Element = new Element(item.id,item.data().name,item.data().userId,item.data().name,item.data().prix,item.data().image,item.data().description);
             //   elements = [...elements,element] as Element[];
                 })
@@ -56,6 +57,15 @@ export class FoodService{
         
         }
     }
+
+    async deleteFood(foodId:string){
+       
+      db.collection("elements").doc(foodId).delete().then(() => {
+        console.log("Document successfully deleted!");
+    }).catch((error) => {
+        console.error("Error removing document: ", error);
+    });
+  }
 
     async postNewCategory(categoryId:string,description:string,hotelId: string,image:string,name:string,prix:number,imagepath:string){
        

@@ -62,7 +62,7 @@ function Menu() {
           <span>Ajouter une nourriture</span>
         </button>
 
-        <Dialog header="Ajouter nourriture ou boisson" visible={visible} style={{ width: '60vw' }} onHide={() => setVisible(false)}>
+        <Dialog header="Ajouter nourriture ou boisson" visible={visible} style={{ width: '80vw' }} onHide={() => setVisible(false)}>
           <AddFood message={displayMessage} hideModal={setVisible}></AddFood>
         </Dialog>
         <Dialog header="Mis à jour" visible={updateFoodVisible} style={{ width: '60vw' }} onHide={() => setUpdateFoodVisible(false)}>

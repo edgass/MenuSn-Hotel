@@ -6,12 +6,14 @@ import thunk from 'redux-thunk';
 import addFoodSlice from './food-store';
 import fetchCategorySlice from './fetch-category-store';
 import  fetchFoodSlice  from './fetch-food-store';
+import  deleteFoodSlice  from './delete-food-store';
 
 const reducers = combineReducers({
   authSlice,
   addFoodSlice,
   fetchCategorySlice,
-  fetchFoodSlice
+  fetchFoodSlice,
+  deleteFoodSlice,
 });
 
 const persistConfig = {

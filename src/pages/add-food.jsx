@@ -70,9 +70,9 @@ export default function AddFood(props){
 
     return(
         <form onSubmit={handleSubmit(onSubmit)}>
-        <div className='grid grid-cols-2 md:grid-cols-2 gap-4'>
+        <div className='grid gap-4'>
             
-            <div className="grid-cols-12">
+            <div className="col-12 md:col-6 lg:col-3">
             <Controller name="name" control={control}
                                //     rules={{ required: 'Email requis.', pattern: { value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i, message: 'Invalid email address. E.g. example@email.com' }}}
                                     render={({ field, fieldState }) => (
@@ -85,7 +85,7 @@ export default function AddFood(props){
                           
             </div>
 
-            <div className="grid-cols-12">
+            <div className="col-12 md:col-6 lg:col-3">
             <Controller name="prix" control={control}
                               //      rules={{ required: 'Email requis.', pattern: { value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i, message: 'Invalid email address. E.g. example@email.com' }}}
                                     render={({ field, fieldState }) => (
@@ -98,13 +98,13 @@ export default function AddFood(props){
                 
             </div>
         
-            <div className="grid-cols-12">
+            <div className="col-12 md:col-6 lg:col-3">
             <FileUpload onSelect={(event)=>setFiles(event.files[0])} multiple={false} chooseLabel='Choisir une image principale' mode='basic' name="demo" url="./upload"
             
             ></FileUpload>
             </div>
 
-            <div className="grid-cols-12">
+            <div className="col-12 md:col-6 lg:col-3">
             <Controller name="categoryId" control={control}
                                  //   rules={{ required: 'Email requis.', pattern: { value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i, message: 'Invalid email address. E.g. example@email.com' }}}
                                     render={({ field, fieldState }) => (
@@ -120,7 +120,7 @@ export default function AddFood(props){
                                 )} />
             </div>
 
-            <div className="grid-cols-12">
+            <div className="col-12 md:col-6 lg:col-3">
                 <div className="p-inputgroup">
                 <Controller name="description" control={control}
                                  //   rules={{ required: 'Email requis.', pattern: { value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i, message: 'Invalid email address. E.g. example@email.com' }}}

@@ -58,6 +58,39 @@ export class FoodService{
         }
     }
 
+    async updateFood(foodId:string, categoryId:string,description:string,hotelId: string,image:string,name:string,prix:number,imagepath:string){
+       
+      try{
+           // Ajouter un nouveau document à la collection "commandes"
+           var docRef = db.collection("elements").doc(foodId);
+
+           docRef.update({
+            categoryId : categoryId,
+            description : description,
+            hotelId : hotelId,
+            image : image,
+            name : name,
+            prix : prix,
+            imagepath:imagepath
+        })
+        .then(() => {
+            console.log("Document successfully updated!");
+        })
+        .catch((error) => {
+            // The document probably doesn't exist.
+            console.error("Error updating document: ", error);
+        });
+
+      
+
+    console.log("Food créée avec succès !", docRef.id);
+    return docRef.id;
+      }catch(e){
+          console.log(e);
+      
+      }
+  }
+
     async deleteFood(foodId:string){
        
       db.collection("elements").doc(foodId).delete().then(() => {

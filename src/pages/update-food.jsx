@@ -17,7 +17,7 @@ import { Column } from 'primereact/column';
 import { Button } from "primereact/button";
 import { Checkbox } from "primereact/checkbox";
 import { RadioButton } from "primereact/radiobutton";
-import { postNewFood } from '../store/food-store';
+import { updateFood } from '../store/update-food-store';
 import { fetchCategory } from '../store/fetch-category-store';
 import { ProgressSpinner } from 'primereact/progressspinner';
 import 'firebase/storage';
@@ -88,10 +88,11 @@ export default function UpdateFood(props){
 
     const { control, formState: { errors }, handleSubmit, reset } = useForm({ defaultValues });
 
-    const onSubmit = async (data) => {
-        console.log(data)
-        console.log(files)
-        await dispatch(postNewFood({ categoryId: data.categoryId.id, description: data.description,hotelId:authState.hotel.id,image:data.image,name:data.name,prix:data.prix,file:files }));
+    const onSubmit = async (data,form) => {
+        console.log("test");
+        console.log(data);
+        console.log(files);
+        await dispatch(updateFood({foodIdToUpdate:props.foodToUpdate[1], categoryId: data.categoryId.id, description: data.description,hotelId:authState.hotel.id,image:data.image,name:data.name,prix:data.prix,file:files }));
         if(state.loading === 'failed'){
           props.message("error","Echec","Veuillez réassayer s'il vous plait",3000)
         }else if(state.loading === 'succeded'){
@@ -102,7 +103,9 @@ export default function UpdateFood(props){
             props.message("warn","Cette action a été rejetée, veuillez réasseyer ou contacter MenuSn",3000)
         }
            
-     //  reset();
+        setShowMessage(true);
+
+        form.restart();
      };
 
 

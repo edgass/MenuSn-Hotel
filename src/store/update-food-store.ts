@@ -8,6 +8,7 @@ import utilServices from "../services/utils-services";
 
 
 export interface FoodCredentials {
+    foodIdToUpdate:string,
     categoryId : string;
     description : string;
     hotelId: string;
@@ -21,23 +22,25 @@ export interface FoodCredentials {
 export interface UpdateFoodState{
     entities : FoodModel[],
     loading : 'idle' | 'pending' | 'succeded' | 'failed',
-    showConfirmAddFood : Boolean
+    showConfirmAddFood : Boolean,
+  
 }
 
 export const initialStateOfAddFood : UpdateFoodState = {
     entities : [],
     loading : 'idle',
     showConfirmAddFood : false
+    
 }
 
-export const postNewFood = createAsyncThunk(
+export const updateFood = createAsyncThunk(
     'food/new',
     async (credential:FoodCredentials,{rejectWithValue})=>{
         try{
             const imagePath = await utilServices.handleUpload(credential.file);
             console.log(imagePath)
        //     return await foodService.postNewFood(credential.categoryId,credential.description,credential.hotelId,credential.image,credential.name,credential.prix,imagePath);
-            return await foodService.postNewFood(credential.categoryId,credential.description,credential.hotelId,credential.image,credential.name,credential.prix,imagePath);
+            return await foodService.updateFood(credential.foodIdToUpdate, credential.categoryId,credential.description,credential.hotelId,credential.image,credential.name,credential.prix,imagePath);
         }catch(err){
             return rejectWithValue([]);
         }
@@ -61,7 +64,7 @@ export const postNewFood = createAsyncThunk(
 
 
 
-export const addFoodSlice = createSlice({
+export const updateFoodSlice = createSlice({
     name: 'command',
     initialState: initialStateOfAddFood,
     reducers: {
@@ -72,18 +75,18 @@ export const addFoodSlice = createSlice({
      extraReducers : (builder) =>{
        
 
-        builder.addCase(postNewFood.pending,(state)=>{
+        builder.addCase(updateFood.pending,(state)=>{
             state.loading = 'pending'
         });
 
         
-        builder.addCase(postNewFood.rejected,(state)=>{
+        builder.addCase(updateFood.rejected,(state)=>{
             state.loading = 'failed'
           //  state.errorMessage = action;
             
         });
 
-        builder.addCase(postNewFood.fulfilled,(state,action)=>{
+        builder.addCase(updateFood.fulfilled,(state,action)=>{
             state.loading = 'succeded';
            
         });
@@ -91,6 +94,6 @@ export const addFoodSlice = createSlice({
 })
 
 
-export default addFoodSlice.reducer;
-export const {setShowConfirmCommandModal} = addFoodSlice.actions
+export default updateFoodSlice.reducer;
+export const {setShowConfirmCommandModal} = updateFoodSlice.actions
 

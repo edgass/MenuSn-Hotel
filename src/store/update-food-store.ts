@@ -18,13 +18,13 @@ export interface FoodCredentials {
   }
 
 
-export interface AddFoodState{
+export interface UpdateFoodState{
     entities : FoodModel[],
     loading : 'idle' | 'pending' | 'succeded' | 'failed',
     showConfirmAddFood : Boolean
 }
 
-export const initialStateOfAddFood : AddFoodState = {
+export const initialStateOfAddFood : UpdateFoodState = {
     entities : [],
     loading : 'idle',
     showConfirmAddFood : false

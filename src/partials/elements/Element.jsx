@@ -1,16 +1,17 @@
 import { useDispatch } from "react-redux";
-import {useEffect} from 'react';
+import {useEffect, useState} from 'react';
 import { useAppSelector } from "../../hook";
-import { deleteFood } from "../../store/delete-food-store";
+import { deleteFood,setShowConfirmDeleteModal,setFoodIdToDelete } from "../../store/delete-food-store";
 
 function Element(props){
 
 
     const dispatch = useDispatch();
     const deleteState = useAppSelector(state=>state.deleteFoodSlice);
+    const [visible, setVisible] = useState(false);
 
     useEffect(()=>{
-        console.log(props.plat[1]);
+        console.log(props.plat[0]);
       },[
         dispatch
     ])
@@ -41,7 +42,11 @@ function Element(props){
             <a class="my-2  items-center px-4 py-2 text-sm font-medium text-center text-white bg-orange-700 rounded-lg hover:bg-orange-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Modifier</a>
             </button>
             <button onClick={()=>{
-                dispatch(deleteFood(props.plat[1]));
+                dispatch(setShowConfirmDeleteModal(true));
+                dispatch(setFoodIdToDelete(props.plat[1]));
+               
+               // setShowConfirmDeleteModal([true,props.plat[1]]);
+               // dispatch(deleteFood(props.plat[1]));
             }}>
             <a class="my-2 items-center px-4 py-2 text-sm font-medium text-center text-gray-900 bg-white border border-gray-300 rounded-lg hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-gray-200 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-700 dark:focus:ring-gray-700">Supprimer</a>
             </button>

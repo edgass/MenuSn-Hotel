@@ -1,12 +1,15 @@
 import React, { Component,useEffect } from 'react';
+import { Form, Field } from 'react-final-form';
 import { InputText } from "primereact/inputtext";
+import {Image} from "primereact/image";
+import { Avatar } from 'primereact/avatar';
 import { FileUpload } from 'primereact/fileupload';
 import { InputTextarea } from 'primereact/inputtextarea';
 import { Dropdown } from 'primereact/dropdown';
 import { addFoodSlice } from '../store/food-store';
 import { useState } from 'react';
 import { useForm, Controller } from 'react-hook-form';
-import {useDispatch} from "react-redux"
+import {useSelector,useDispatch} from "react-redux"
 import { useAppSelector } from '../hook';
 import { classNames } from 'primereact/utils';
 import './FormDemo.css';
@@ -30,23 +33,57 @@ export default function UpdateFood(props){
     const authState = useAppSelector(state=>state.authSlice);
     const [files, setFiles] = useState([]);
     const [categoryList, setCategoryList] = useState([]);
+    const [currentCategorie, setCurrentCategorie] = useState([]);
   //  var message,hideModal = props;
 
 
     useEffect(() =>{
-       // console.log("Food to control is "+props.foodToUpdate.name)
-         dispatch(fetchCategory());
+       
+       //  dispatch(fetchCategory());
+         console.log(categoryState.entities)
+        
+         for(let i=0;i<categoryState.entities.length;i++){
+            if(categoryState.entities[i].id == props.foodToUpdate[0].categoryId){
+                setCurrentCategorie(categoryState.entities[i]);
+            }
+         }
+         
 
       }, [dispatch]);
 
+
+      const validate = (data) => {
+        let errors = {};
+
+        if (!data.name) {
+            errors.name = 'Champ obligatoire';
+        }
+
+        if (!data.prix) {
+            errors.prix = 'Champ obligatoire';
+        }
+        else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(data.email)) {
+            errors.email = 'Invalid email address. E.g. example@email.com';
+        }
+
+        if (!data.password) {
+            errors.password = 'Password is required.';
+        }
+
+        if (!data.accept) {
+            errors.accept = 'You need to agree to the terms and conditions.';
+        }
+
+        return errors;
+    };
    
     const defaultValues = {
-        categoryId : props.foodToUpdate.categoryId,
-        description: props.foodToUpdate.description,
-        hotelId: props.foodToUpdate.hotelId,
-        image: props.foodToUpdate.image,
-        name: props.foodToUpdate.name,
-        prix: props.foodToUpdate.prix
+        categoryId : '',
+        description:'',
+        hotelId: '',
+        image: '',
+        name: '',
+        prix: 0
     }
 
     const { control, formState: { errors }, handleSubmit, reset } = useForm({ defaultValues });
@@ -70,83 +107,92 @@ export default function UpdateFood(props){
 
 
     return(
-        <form onSubmit={handleSubmit(onSubmit)}>
-        <div className='grid grid-cols-2 md:grid-cols-2 gap-4'>
+        <Form onSubmit={onSubmit} initialValues={{ categoryId: props.foodToUpdate[0].categoryId, description: props.foodToUpdate[0].description, hotelId: '', image: null, name: props.foodToUpdate[0].name, prix: props.foodToUpdate[0].prix }} validate={validate} render={({ handleSubmit }) => (
+            <form onSubmit={handleSubmit}>
+                 <div className='grid gap-4'>
+
+                 <div className="col-12 md:col-6 lg:col-3 ">
+                 <Avatar className='' image=  {files.objectURL == "" | files.objectURL == null ? props.foodToUpdate[0].imagepath : files.objectURL } size="xlarge" shape="circle" />  
             
-            <div className="grid-cols-12">
-            <Controller name="name" control={control}
-                               //     rules={{ required: 'Email requis.', pattern: { value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i, message: 'Invalid email address. E.g. example@email.com' }}}
-                                    render={({ field, fieldState }) => (
-                                        <div className="p-inputgroup">
-                                        <InputText id={field.name} {...field} className={classNames({ 'p-invalid': fieldState.invalid })} placeholder="Nom de la nourriture" />    
-                                        
-                                </div>    
-                                     
-                                )} />
-                          
-            </div>
+                    </div>
 
-            <div className="grid-cols-12">
-            <Controller name="prix" control={control}
-                              //      rules={{ required: 'Email requis.', pattern: { value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i, message: 'Invalid email address. E.g. example@email.com' }}}
-                                    render={({ field, fieldState }) => (
-                                        <div className="p-inputgroup">
-                                        <InputText id={field.name} {...field} className={classNames({ 'p-invalid': fieldState.invalid })} placeholder="Prix" />
-                                        <span className="p-inputgroup-addon">FCFA</span>
-                                    </div>
-                                     
-                                )} />
-                
-            </div>
-        
-            <div className="grid-cols-12">
-            <FileUpload onSelect={(event)=>setFiles(event.files[0])} multiple={false} chooseLabel='Choisir une image principale' mode='basic' name="demo" url="./upload"
+                    <div className="col-12 md:col-6 lg:col-3">
+                        <Field name="name" render={({ input, meta }) => (
+                            <div className="p-inputgroup">
+                                <InputText id="name" {...input} placeholder="Nom de la nourriture" />        
+                            </div>    
+                        )} />   
+                                
+                    </div>
+
+                   
+                    <div className="col-12 md:col-6 lg:col-3">
+                        <Field name="prix" render={({ input, meta }) => (
+                            <div className="p-inputgroup">
+                            <InputText id="prix" {...input}  placeholder="Prix" />
+                            <span className="p-inputgroup-addon">FCFA</span>
+                         </div>  
+                        )} />   
+                                
+                    </div>
+
+                    <div className="col-12 md:col-6 lg:col-3">
+                        <Field name="name" render={({ input, meta }) => (
+                           <FileUpload onSelect={(event)=>
+                        
+                            {
+                                setFiles(event.files[0])
+                            }
+                        } multiple={false} chooseLabel="Changer l'image principale" mode='basic' name="demo" url="./upload"
+                    
+                           ></FileUpload>
+                        )} />   
+                                
+                    </div>
+
+                    <div className="col-12 md:col-6 lg:col-3">
+                        <Field name="category" render={({ input, meta }) => (
+                            <Dropdown  id="categoryId" {...input} optionLabel="nom"
+                            // value={category} onChange={(e) => {this.setCategory({categoryList: e.value})}} placeholder="Selectionner une categorie"
+                            value={currentCategorie}
+                            onChange={({ value }) => setCurrentCategorie(value)}
+                          defaultValue={categoryState.entities[0]}
+                            placeholder="Selectionner une categorie"
+                            options={categoryState.entities?.length === 0 ? [{ name: "Liste Vide" }] :
+                                    categoryState.loading == 'pending' ? [{ name: "En cours de chargement" }] :
+                                categoryState.entities} />
+                        )} />   
+                                
+                    </div>
+
+                    <div className="col-12 md:col-6 lg:col-3">
+                        <Field name="description" render={({ input, meta }) => (
+                            <div className="p-inputgroup">
+                                 <div className="p-inputgroup">
+                                                    <InputTextarea id="description" {...input} placeholder='Rediger une description' rows={5} cols={30}/>     
+                                                
+                                                </div> 
+
+                            </div>
+                        )} />   
+                                
+                    </div>
+
             
-            ></FileUpload>
-            </div>
-
-            <div className="grid-cols-12">
-            <Controller name="categoryId" control={control}
-                                 //   rules={{ required: 'Email requis.', pattern: { value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i, message: 'Invalid email address. E.g. example@email.com' }}}
-                                    render={({ field, fieldState }) => (
-                                        <Dropdown optionLabel="nom" id={field.name} {...field} className={classNames({ 'p-invalid': fieldState.invalid })}
-                                        // value={category} onChange={(e) => {this.setCategory({categoryList: e.value})}} placeholder="Selectionner une categorie"
-                                        // value={category} onChange={(e) => {setCategory(e.value)}}
-                                        value={control.id}
-                                         placeholder="Selectionner une categorie"
-                                         options={categoryState.entities?.length === 0 ? [{ name: "Liste Vide" }] :
-                                                categoryState.loading == 'pending' ? [{ name: "En cours de chargement" }] :
-                                            categoryState.entities} />
-                                     
-                                )} />
-            </div>
-
-            <div className="grid-cols-12">
-                <div className="p-inputgroup">
-                <Controller name="description" control={control}
-                                 //   rules={{ required: 'Email requis.', pattern: { value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i, message: 'Invalid email address. E.g. example@email.com' }}}
-                                    render={({ field, fieldState }) => (
-                                        <div className="p-inputgroup">
-                                        <InputTextarea id={field.name} {...field} className={classNames({ 'p-invalid': fieldState.invalid })} placeholder='Rediger une description' rows={5} cols={30}/>     
-                                        
-                                </div>    
-                                     
-                                )} />
-                
-     
-                
-             
+                    <div className="grid-cols-12 place-content-center">
+                    {state.loading === "pending" ? <ProgressSpinner style={{width: '50px', height: '50px'}}></ProgressSpinner> : 
+                                <Button type='submit' label="Enregistrer" className="p-button-success" />}
+                        
+                    </div>    
                     
                 </div>
-            </div>
-            <div className="grid-cols-12 place-content-center">
-            {state.loading === "pending" ? <ProgressSpinner style={{width: '50px', height: '50px'}}></ProgressSpinner> : 
-                          <Button type='submit' label="Enregistrer" className="p-button-success" />}
-                
-            </div>    
-            
-        </div>
-        </form>
+       
+            </form>
+
+        )} />
+        
+           
+               
 
     );
 }

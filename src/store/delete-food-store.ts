@@ -8,11 +8,13 @@ import utilServices from "../services/utils-services";
 export interface DeleteFoodState{
     loading : 'idle' | 'pending' | 'succeded' | 'failed',
     showConfirmDeleteFood : Boolean
+    foodIdToDelete:string | null;
 }
 
 export const initialStateOfDeleteFood : DeleteFoodState = {
     loading : 'idle',
-    showConfirmDeleteFood : false
+    showConfirmDeleteFood : false,
+    foodIdToDelete:null
 }
 
 export const deleteFood = createAsyncThunk(
@@ -49,6 +51,9 @@ export const deleteFoodSlice = createSlice({
     reducers: {
         setShowConfirmDeleteModal(state,action){
             state.showConfirmDeleteFood = action.payload;
+        },
+        setFoodIdToDelete(state,action){
+            state.foodIdToDelete = action.payload;
         }
     },
      extraReducers : (builder) =>{
@@ -74,5 +79,5 @@ export const deleteFoodSlice = createSlice({
 
 
 export default deleteFoodSlice.reducer;
-export const {setShowConfirmDeleteModal} = deleteFoodSlice.actions
+export const {setShowConfirmDeleteModal,setFoodIdToDelete} = deleteFoodSlice.actions
 

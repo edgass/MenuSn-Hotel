@@ -16,6 +16,9 @@ import { fetchFoods } from '../store/fetch-food-store';
 import { ProgressSpinner } from 'primereact/progressspinner';
 import UpdateFood from './update-food';
 import { FoodModel } from '../models/food-model';
+import { ConfirmDeleteFoodModal } from './confirm_delete_food_modal';
+import UpdateFood2 from './update-food';
+import { fetchCategory } from '../store/fetch-category-store';
         
 
 function Menu() {
@@ -31,13 +34,16 @@ function Menu() {
 }
   const dispatch = useDispatch();
   const fetchState = useAppSelector(state=>state.fetchFoodSlice);
+  const deleteState = useAppSelector(state=>state.deleteFoodSlice);
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [visible, setVisible] = useState(false);
   const [updateFoodVisible, setUpdateFoodVisible] = useState(false);
+  const [deleteFoodVisible, setDeleteFoodVisible] = useState(false);
   const [foodToUpdate, setFoodToUpdate] = useState(new FoodModel('','','','','',0));
 
   useEffect(()=>{
-    dispatch(fetchFoods())
+    dispatch(fetchFoods());
+    dispatch(fetchCategory());
   },[
     dispatch
 ])
@@ -68,6 +74,9 @@ function Menu() {
         <Dialog header="Mis à jour" visible={updateFoodVisible} style={{ width: '60vw' }} onHide={() => setUpdateFoodVisible(false)}>
           <UpdateFood message={displayMessage} hideModal={setUpdateFoodVisible} foodToUpdate={foodToUpdate}></UpdateFood>
         </Dialog>
+        {deleteState.showConfirmDeleteFood ? <ConfirmDeleteFoodModal foodId={deleteState.foodIdToDelete}></ConfirmDeleteFoodModal> : null}
+          
+        
       
       </div>
       

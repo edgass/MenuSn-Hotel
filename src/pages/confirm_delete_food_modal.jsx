@@ -2,6 +2,8 @@ import React,{useState,useEffect} from 'react';
 import {useDispatch} from 'react-redux'
 import { deleteFood, setShowConfirmDeleteModal} from '../store/delete-food-store';
 import { fetchFoods } from '../store/fetch-food-store';
+import { activateFood } from '../store/activate-food-store';
+import { updateFood } from '../store/update-food-store';
 //import Swal from 'sweetalert2'
 import { useAppSelector } from '../hook';
 import { ProgressSpinner } from 'primereact/progressspinner';
@@ -12,6 +14,8 @@ import { setShowConfirmCommandModal } from '../store/food-store';
 export function ConfirmDeleteFoodModal(props){
   
     const deleteFoodState = useAppSelector(state=>state.deleteFoodSlice)
+    const updateFoodState = useAppSelector(state=>state.updateFoodState)
+    const activateFoodState = useAppSelector(state=>state.activateFoodState)
 
     const dispatch = useDispatch()
 
@@ -50,7 +54,8 @@ export function ConfirmDeleteFoodModal(props){
             <div class="mt-3 sm:mt-0 sm:ml-4 text-center">
               <h2 class="text-lg font-medium leading-6 text-gray-900" id="modal-title">Confirmation de suppression</h2>
               <div className="w-full py-6 grid grid-cols-1">
-                <p>Cet élément sera définitivement supprimé et cette action est irréversible.<br/> Si vous ne souhaitez pas que cet élément apparaisse pour les clients, vous pouvez tout simplement le désactiver.</p>
+              <p>Cet élément sera définitivement supprimé et cette action est irréversible.<br/></p>
+                <p>Si vous ne souhaitez pas que cet élément apparaisse pour les clients, vous pouvez tout simplement le désactiver.</p>
         </div>
             </div>
           </div>
@@ -75,9 +80,10 @@ export function ConfirmDeleteFoodModal(props){
           >Supprimer</button>
         }
           <button type="button" class="mt-3 inline-flex w-full justify-center rounded-md border border-gray-300 bg-orange-500 px-4 py-2 text-base font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm"
-          onClick={
+          onClick= {
           ()=>{
-           
+             dispatch(activateFood({foodId:deleteFoodState.foodIdToDelete,activate:false}));
+             dispatch(setShowConfirmDeleteModal(false));
           } 
         
           }>Désactiver</button>

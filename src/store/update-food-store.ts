@@ -15,7 +15,7 @@ export interface FoodCredentials {
     image: string;
     name: string;
     prix: number;
-    file:File;
+    file:File | string;
   }
 
 
@@ -34,11 +34,17 @@ export const initialStateOfAddFood : UpdateFoodState = {
 }
 
 export const updateFood = createAsyncThunk(
-    'food/new',
+    'food/update',
     async (credential:FoodCredentials,{rejectWithValue})=>{
+        let imagePath : any;
         try{
-            const imagePath = await utilServices.handleUpload(credential.file);
-            console.log(imagePath)
+            if(typeof credential.file === "string"){
+                imagePath = credential.file;
+            }else{
+                 imagePath = await utilServices.handleUpload(credential.file);
+                
+            }
+            console.log(imagePath);
        //     return await foodService.postNewFood(credential.categoryId,credential.description,credential.hotelId,credential.image,credential.name,credential.prix,imagePath);
             return await foodService.updateFood(credential.foodIdToUpdate, credential.categoryId,credential.description,credential.hotelId,credential.image,credential.name,credential.prix,imagePath);
         }catch(err){
@@ -65,7 +71,7 @@ export const updateFood = createAsyncThunk(
 
 
 export const updateFoodSlice = createSlice({
-    name: 'command',
+    name: 'updateFood',
     initialState: initialStateOfAddFood,
     reducers: {
         setShowConfirmCommandModal(state,action){

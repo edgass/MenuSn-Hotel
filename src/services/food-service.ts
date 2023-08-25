@@ -1,15 +1,15 @@
 import db from "../firebase.config";
-import { getFirestore, collection, addDoc,query, where, getDocs, deleteDoc, doc  } from "firebase/firestore";
+import { getFirestore, collection, addDoc,query, where, getDocs, deleteDoc, doc, getDoc  } from "firebase/firestore";
 import { HotelModel } from "../models/hotel-model";
 import { CategoryModel } from "../models/category";
+import { useDispatch } from "react-redux";
 
 
 //const elementsCollectionRef = collection(db, "elements");
 
-
 export class FoodService{
 
-    
+ 
  // async getAllElements(catId:string) : Promise<Element[]>{
     async getAllElements() : Promise<Element[]>{
        
@@ -32,6 +32,25 @@ export class FoodService{
         console.log(e);
         return elements
     }
+}
+
+async getSingleElementVisibility(id:string) : Promise<Boolean | null>{
+       
+  var elements : Element;
+  let visibility = null;
+  const docRef = doc(db, "elements", id);
+  try {
+    const docSnap = await getDoc(docRef);
+    if(docSnap.exists()) {
+        console.log(docSnap.data());
+        visibility = docSnap.data().visibility;
+    } else {
+        console.log("Document does not exist")
+    }
+} catch(error) {
+    console.log(error)
+}
+return visibility;
 }
     
    // async postNewCommand(hotelId:string,tableId:String,) : Promise<Element[]>{
@@ -59,10 +78,12 @@ export class FoodService{
     }
 
     async updateFood(foodId:string, categoryId:string,description:string,hotelId: string,image:string,name:string,prix:number,imagepath:string){
+     console.log(foodId, categoryId,description,hotelId,image,name,prix,imagepath);
        
       try{
            // Ajouter un nouveau document à la collection "commandes"
-           var docRef = db.collection("elements").doc(foodId);
+           var docRef = await db.collection("elements").doc(foodId);
+           
 
            docRef.update({
             categoryId : categoryId,
@@ -73,23 +94,49 @@ export class FoodService{
             prix : prix,
             imagepath:imagepath
         })
-        .then(() => {
-            console.log("Document successfully updated!");
+        .then((e) => {
+            console.log("Document successfully updated!", e);
+        
         })
         .catch((error) => {
             // The document probably doesn't exist.
             console.error("Error updating document: ", error);
         });
 
-      
-
-    console.log("Food créée avec succès !", docRef.id);
     return docRef.id;
       }catch(e){
           console.log(e);
       
       }
   }
+
+  async activateFood(foodId:string, activate:boolean){
+     
+     try{
+      console.log(foodId);
+          // Ajouter un nouveau document à la collection "commandes"
+          let docSnap = db.collection("elements").doc(foodId);
+          console.log(docSnap.id)
+        
+
+          docSnap.update({
+           visible : activate,
+       })
+       .then((e) => {
+           console.log("Document successfully updated!", e);
+       
+       })
+       .catch((error) => {
+           // The document probably doesn't exist.
+           console.error("Error updating document: ", error);
+       });
+
+  
+     }catch(e){
+         console.log(e);
+     
+     }
+ }
 
     async deleteFood(foodId:string){
        

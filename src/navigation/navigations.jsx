@@ -7,6 +7,7 @@ import { Login } from "../pages/login";
 import SearchAccess from "../pages/searchAccess";
 import Menu from "../pages/Menu";
 import MainHome from "../pages/MainHome";
+import Caisse from "../pages/Caisse/Caisse";
 
 
 const Navigation = ()=>(
@@ -21,6 +22,11 @@ const Navigation = ()=>(
                 <Menu />
             </AuthGard>
         } />
+        <Route exact path="/dashboard/caisse" element={
+            <AuthGard>
+                <Caisse />
+            </AuthGard>
+        } />        
         <Route path="/signin" element={
             <GuestGard>
                 <Login/>

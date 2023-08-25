@@ -22,6 +22,7 @@ import { fetchCategory } from '../store/fetch-category-store';
 import { ProgressSpinner } from 'primereact/progressspinner';
 import 'firebase/storage';
 import { CategoryModel } from '../models/category';
+import { fetchFoods } from '../store/fetch-food-store';
 
 
 export default function UpdateFood(props){
@@ -38,9 +39,7 @@ export default function UpdateFood(props){
 
 
     useEffect(() =>{
-       
-       //  dispatch(fetchCategory());
-         console.log(categoryState.entities)
+        setFiles(props.foodToUpdate[0].imagepath);
         
          for(let i=0;i<categoryState.entities.length;i++){
             if(categoryState.entities[i].id == props.foodToUpdate[0].categoryId){
@@ -48,6 +47,7 @@ export default function UpdateFood(props){
             }
          }
          
+        
 
       }, [dispatch]);
 
@@ -89,28 +89,27 @@ export default function UpdateFood(props){
     const { control, formState: { errors }, handleSubmit, reset } = useForm({ defaultValues });
 
     const onSubmit = async (data,form) => {
-        console.log("test");
-        console.log(data);
         console.log(files);
-        await dispatch(updateFood({foodIdToUpdate:props.foodToUpdate[1], categoryId: data.categoryId.id, description: data.description,hotelId:authState.hotel.id,image:data.image,name:data.name,prix:data.prix,file:files }));
+        await dispatch(updateFood({foodIdToUpdate:props.foodToUpdate[1], categoryId: currentCategorie.id, description: data.description,hotelId:authState.hotel.id,image:data.image,name:data.name,prix:data.prix,file : files }));
         if(state.loading === 'failed'){
           props.message("error","Echec","Veuillez réassayer s'il vous plait",3000)
         }else if(state.loading === 'succeded'){
            props.hideModal(false)
-           props.message("error","Parfait !","Votre élément a été ajoutée",3000)
+           props.message("success","Parfait !","Votre élément a été mis à jour avec succés",3000)
+           dispatch(fetchFoods());
         }else if(state.loading === 'rejected'){
         
             props.message("warn","Cette action a été rejetée, veuillez réasseyer ou contacter MenuSn",3000)
         }
            
-        setShowMessage(true);
+     //   setShowMessage(true);
 
         form.restart();
      };
 
 
     return(
-        <Form onSubmit={onSubmit} initialValues={{ categoryId: props.foodToUpdate[0].categoryId, description: props.foodToUpdate[0].description, hotelId: '', image: null, name: props.foodToUpdate[0].name, prix: props.foodToUpdate[0].prix }} validate={validate} render={({ handleSubmit }) => (
+        <Form onSubmit={onSubmit} initialValues={{ categoryId: props.foodToUpdate[0].categoryId, description: props.foodToUpdate[0].description, hotelId: authState.hotel.id, image: null, name: props.foodToUpdate[0].name, prix: props.foodToUpdate[0].prix }} /*validate={validate}*/ render={({ handleSubmit }) => (
             <form onSubmit={handleSubmit}>
                  <div className='grid gap-4'>
 

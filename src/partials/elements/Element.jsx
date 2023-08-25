@@ -1,7 +1,9 @@
 import { useDispatch } from "react-redux";
 import {useEffect, useState} from 'react';
 import { useAppSelector } from "../../hook";
+import { activateFood } from "../../store/activate-food-store";
 import { deleteFood,setShowConfirmDeleteModal,setFoodIdToDelete } from "../../store/delete-food-store";
+import db from "../../firebase.config";
 
 function Element(props){
 
@@ -9,9 +11,14 @@ function Element(props){
     const dispatch = useDispatch();
     const deleteState = useAppSelector(state=>state.deleteFoodSlice);
     const [visible, setVisible] = useState(false);
+    const [foodCurrentId, setFoodCurrentId] = useState(null);
 
     useEffect(()=>{
-        console.log(props.plat[0]);
+        setFoodCurrentId(props.plat[1]);
+        db.collection("elements").doc(props.plat[1])
+    .onSnapshot((doc) => {
+        setVisible(doc.data().visible)
+    });
       },[
         dispatch
     ])
@@ -23,7 +30,14 @@ function Element(props){
     <div class="flex justify-end px-4 pt-4">
        <div>
         <div></div>
-       <p className="text-red-600 text-bold">Inactif</p>
+       {visible ? <p  onClick={()=>{
+        console.log(props.plat[1]);
+             dispatch(activateFood({foodId:foodCurrentId,activate:false}));
+          } } className="text-green-600 text-bold">Actif</p> 
+          
+          : <p onClick={()=>{
+            dispatch(activateFood({foodId:foodCurrentId,activate:true}));
+         } } className="text-red-600 text-bold">Inactif</p>}
        </div>
            
         

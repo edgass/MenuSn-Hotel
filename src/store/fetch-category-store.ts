@@ -10,12 +10,14 @@ import { CategoryModel } from "../models/category";
   export interface CategoryCredentials {
     name : string;
     position : number;
+
   }
 
 
 export interface FetchCategoryState{
     entities : CategoryModel[],
     loading : 'idle' | 'pending' | 'succeded' | 'failed',
+    categoryIdForSearchingElements:string | null,
 }
 
 
@@ -23,6 +25,8 @@ export interface FetchCategoryState{
 export const initialStateFetchCategory : FetchCategoryState = {
     entities : [],
     loading : 'idle',
+    categoryIdForSearchingElements:null,
+
 }
 
 
@@ -60,7 +64,10 @@ export const fetchCategorySlice = createSlice({
     name: 'fetchCategoryList',
     initialState: initialStateFetchCategory,
     reducers: {
-     
+     setCategoryForElementSearching:(state,action)=>{
+        console.log(action.payload)
+        state.categoryIdForSearchingElements = action.payload;
+     }
     },
      extraReducers : (builder) =>{
        
@@ -85,4 +92,5 @@ export const fetchCategorySlice = createSlice({
 })
 
 export default fetchCategorySlice.reducer;
+export const {setCategoryForElementSearching} = fetchCategorySlice.actions;
 

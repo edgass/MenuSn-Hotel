@@ -21,6 +21,7 @@ import { FoodModel } from '../../models/food-model';
 import { ConfirmDeleteFoodModal } from '../confirm_delete_food_modal';
 import UpdateFood2 from '../update-food';
 import { fetchCategory } from '../../store/fetch-category-store';
+import SingleCategory from './single-category';
         
 
 function CaisseCategorys() {
@@ -35,7 +36,7 @@ function CaisseCategorys() {
 
 }
   const dispatch = useDispatch();
-  const fetchState = useAppSelector(state=>state.fetchFoodSlice);
+  const categoryState = useAppSelector(state=>state.fetchCategorySlice);
   const deleteState = useAppSelector(state=>state.deleteFoodSlice);
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [visible, setVisible] = useState(false);
@@ -44,7 +45,6 @@ function CaisseCategorys() {
   const [foodToUpdate, setFoodToUpdate] = useState(new FoodModel('','','','','',0));
 
   useEffect(()=>{
-    dispatch(fetchFoods());
     dispatch(fetchCategory());
   },[
     dispatch
@@ -56,11 +56,14 @@ function CaisseCategorys() {
       <div className="">
         <h4 class="mb-2 ml-2">Categories</h4>
         <div class="grid md:grid-cols-3 md:grid-cols-2 lg:grid-cols-3">
-          
-          <div class="bg-zinc-200 rounded-md m-3 "><p class="px-7 py-8 text-center text-neutral-800">Plat</p></div>
-          <div class="bg-zinc-200 rounded-md m-3"><p  class="px-7 py-8 text-center text-neutral-800">Entrée</p></div>
-          <div class="bg-zinc-200 rounded-md m-3"><p class="px-7 py-8 text-center text-neutral-800">Boisson</p></div>
-          <div class="bg-zinc-200 rounded-md m-3"><p class="px-7 py-8 text-center text-neutral-800">Diner</p></div>
+        {categoryState.loading == 'pending' ? <div><p>En cours de chargement !!</p></div> :
+          categoryState.entities?.length === 0 ? <div><p>Aucune Categorie retrouvée. Veillez reactualiser la page SVP</p></div> :
+                                            categoryState.entities.map((tab)=>{
+                                          
+                                                return(
+                                                 <SingleCategory key={tab.position} category={tab}/>
+                                                )
+                                            })}
         </div>
       </div>
  

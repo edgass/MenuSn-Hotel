@@ -34,6 +34,29 @@ export class FoodService{
     }
 }
 
+async getAllElementsByCategory(catId:string) : Promise<Element[]>{
+       
+  var elements : Element[] = [];
+  try{
+      const resp = db.collection('elements');
+      // var data= await resp.get();
+       var data= await resp.where('hotelId' ,'==', 'HOnjOpu9qarlYU1SZzny').where('categoryId','==',catId).get();
+   
+           data.docs.forEach(item=>{
+           
+             elements = [...elements,[item.data(),item.id]] as Element[];
+             
+        //  var element : Element = new Element(item.id,item.data().name,item.data().userId,item.data().name,item.data().prix,item.data().image,item.data().description);
+          //   elements = [...elements,element] as Element[];
+              })
+         //  console.log(elements)
+                       return elements;  
+  }catch(e){
+      console.log(e);
+      return elements
+  }
+}
+
 async getSingleElementVisibility(id:string) : Promise<Boolean | null>{
        
   var elements : Element;

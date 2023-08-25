@@ -80,7 +80,7 @@ function Caisse() {
           <div class="col-span-5 relative overflow-x-auto overflow-y-auto">
             <CaisseElements/>
           </div>
-          <div class="col-span-4 bg-slate-50 relative overflow-x-auto overflow-y-auto">
+          <div class="col-span-4 bg-orange-50 relative overflow-x-auto overflow-y-auto">
             <ListeCommand/>
           </div>
         </div>

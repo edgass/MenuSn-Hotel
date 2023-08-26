@@ -1,4 +1,5 @@
 import React, { useState,useRef,useEffect } from 'react';
+import db from '../../firebase.config';
 
 import './Caisse.css';
 
@@ -21,6 +22,8 @@ import { FoodModel } from '../../models/food-model';
 import { ConfirmDeleteFoodModal } from '../confirm_delete_food_modal';
 import UpdateFood2 from '../update-food';
 import { fetchCategory } from '../../store/fetch-category-store';
+import { fetchCommand } from '../../store/fetch-command-store';
+import SingleCommand from './single-command';
         
 
 function ListeCommand() {
@@ -36,16 +39,25 @@ function ListeCommand() {
 }
   const dispatch = useDispatch();
   const fetchState = useAppSelector(state=>state.fetchFoodSlice);
-  const deleteState = useAppSelector(state=>state.deleteFoodSlice);
+  const fetchCommandState = useAppSelector(state=>state.deleteFoodSlice);
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [visible, setVisible] = useState(false);
   const [updateFoodVisible, setUpdateFoodVisible] = useState(false);
   const [deleteFoodVisible, setDeleteFoodVisible] = useState(false);
-  const [foodToUpdate, setFoodToUpdate] = useState(new FoodModel('','','','','',0));
+  const [listOfCommand, setListOfCommand] = useState([]);
 
   useEffect(()=>{
-    dispatch(fetchFoods());
-    dispatch(fetchCategory());
+   
+db.collection("commande")
+.onSnapshot((snap) => {
+   setListOfCommand([])
+    snap.forEach((doc) => {
+        var data = doc;
+        setListOfCommand(arr=>[...arr,data]);
+        
+});
+
+})
   },[
     dispatch
 ])
@@ -67,7 +79,7 @@ function ListeCommand() {
                     Emplacement
                 </th>
                 <th scope="col" class="px-6 py-3">
-                    PT
+                    PT (FCFA)
                 </th>
                 <th scope="col" class="px-6 py-3">
                     Etat
@@ -75,62 +87,13 @@ function ListeCommand() {
             </tr>
         </thead>
         <tbody>
-            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                    0021
-                </th>
-                <td class="px-6 py-4">
-                    Table 7
-                </td>
-                <td class="px-6 py-4">
-                    45000 FCFA
-                </td>
-                <td class="px-6 py-4 text-green">
-                    Cuisine
-                </td>
-            </tr>
-            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                    0022
-                </th>
-                <td class="px-6 py-4">
-                    Chambre 2
-                </td>
-                <td class="px-6 py-4">
-                    4000 FCFA
-                </td>
-                <td class="px-6 py-4 text-orange">
-                    En attente
-                </td>
-            </tr>
-            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                    0024
-                </th>
-                <td class="px-6 py-4">
-                    Table 4
-                </td>
-                <td class="px-6 py-4">
-                    17000 FCFA
-                </td>
-                <td class="px-6 py-4 text-green">
-                    En attente
-                </td>
-            </tr>
-            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                    2145
-                </th>
-                <td class="px-6 py-4">
-                    Table 12
-                </td>
-                <td class="px-6 py-4">
-                    12000 FCFA
-                </td>
-                <td class="px-6 py-4 text-red">
-                    Refusée
-                </td>
-            </tr>
+            {
+                listOfCommand.map((cmd)=>{
+                   return(
+                    <SingleCommand command= {cmd} />
+                   )
+                })
+            }
 
             
         </tbody>
@@ -143,3 +106,9 @@ function ListeCommand() {
 }
 
 export default ListeCommand;
+
+
+
+
+
+

@@ -5,13 +5,6 @@ import { FoodModel } from "../models/food-model";
 
 
 
-
-  export interface ElementCredentials {
-    name : string;
-    position : number;
-  }
-
-
 export interface FetchElementState{
     entities : FoodModel[],
     loading : 'idle' | 'pending' | 'succeded' | 'failed',
@@ -26,11 +19,11 @@ export const initialStateFetchCategory : FetchElementState = {
 
 
 export const fetchFoodsByCategory = createAsyncThunk(
-    'food/fetch',
-    async (credential:ElementCredentials,{rejectWithValue})=>{
+    'food/fetchByCat',
+    async (catId:string,{rejectWithValue})=>{
         try{
         
-           const elements =  await foodService.getAllElements();
+           const elements =  await foodService.getAllElementsByCategory(catId);
         console.log(elements)
             return elements;
         }catch(err){
@@ -39,24 +32,9 @@ export const fetchFoodsByCategory = createAsyncThunk(
     }
 );
 
-/*  export const getCommandFromLocalStorage = createAsyncThunk(
-    'command/get',
-    async (arg:string,{getState,rejectWithValue})=>{    
-        try{
-            const storedValue = localStorage.getItem("command");
 
-        }catch(err){
-            console.log(err)
-            return rejectWithValue([]);
-        }
-    }
-);  */
-
-
-
-
-export const fetchFoodSlice = createSlice({
-    name: 'fetchFoodList',
+export const fetchFoodByCategorySlice = createSlice({
+    name: 'fetchFoodListByCat',
     initialState: initialStateFetchCategory,
     reducers: {
      
@@ -83,5 +61,5 @@ export const fetchFoodSlice = createSlice({
     } 
 })
 
-export default fetchFoodSlice.reducer;
+export default fetchFoodByCategorySlice.reducer;
 

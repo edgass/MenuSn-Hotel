@@ -3,40 +3,35 @@ import { FoodModel } from "../models/food-model";
 import foodService from "../services/food-service";
 import utilServices from "../services/utils-services";
 import { CategoryModel } from "../models/category";
+import commandService from "../services/command_service";
+import CommandModel from "../models/command_model";
 
 
 
 
-  export interface CategoryCredentials {
-    name : string;
-    position : number;
-
-  }
 
 
-export interface FetchCategoryState{
-    entities : CategoryModel[],
+export interface FetchCommandState{
+    entities : CommandModel[],
     loading : 'idle' | 'pending' | 'succeded' | 'failed',
-    categoryIdForSearchingElements:string | null,
 }
 
 
 
-export const initialStateFetchCategory : FetchCategoryState = {
+export const initialStateOfFetchCommand : FetchCommandState = {
     entities : [],
     loading : 'idle',
-    categoryIdForSearchingElements:null,
 
 }
 
 
-export const fetchCategory = createAsyncThunk(
-    'food/newFetchCategory',
-    async (credential:CategoryCredentials,{rejectWithValue})=>{
+export const fetchCommand = createAsyncThunk(
+    'food/fetchCommand',
+    async (credential:null,{rejectWithValue})=>{
         try{
         
-           const categorys =  await foodService.fetchCategorys();
-            return categorys;
+           const commands =  await commandService.getCommands();
+            return commands;
         }catch(err){
             return rejectWithValue([]);
         }
@@ -59,30 +54,27 @@ export const fetchCategory = createAsyncThunk(
 
 
 
-export const fetchCategorySlice = createSlice({
-    name: 'fetchCategoryList',
-    initialState: initialStateFetchCategory,
+export const fetchCommandSlice = createSlice({
+    name: 'fetcommand',
+    initialState: initialStateOfFetchCommand,
     reducers: {
-     setCategoryForElementSearching:(state,action)=>{
-        state.categoryIdForSearchingElements = action.payload;
-        console.log(state.categoryIdForSearchingElements)
-     }
+    
     },
      extraReducers : (builder) =>{
        
 
-        builder.addCase(fetchCategory.pending,(state)=>{
+        builder.addCase(fetchCommand.pending,(state)=>{
             state.loading = 'pending'
         });
 
         
-        builder.addCase(fetchCategory.rejected,(state)=>{
+        builder.addCase(fetchCommand.rejected,(state)=>{
             state.loading = 'failed'
           //  state.errorMessage = action;
             
         });
 
-        builder.addCase(fetchCategory.fulfilled,(state,action)=>{
+        builder.addCase(fetchCommand.fulfilled,(state,action)=>{
             state.loading = 'succeded';
             state.entities = action.payload
            
@@ -90,6 +82,6 @@ export const fetchCategorySlice = createSlice({
     } 
 })
 
-export default fetchCategorySlice.reducer;
-export const {setCategoryForElementSearching} = fetchCategorySlice.actions;
+export default fetchCommandSlice.reducer;
+
 

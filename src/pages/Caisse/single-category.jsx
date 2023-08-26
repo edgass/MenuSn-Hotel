@@ -22,6 +22,7 @@ import { ConfirmDeleteFoodModal } from '../confirm_delete_food_modal';
 import UpdateFood2 from '../update-food';
 import { fetchCategory } from '../../store/fetch-category-store';
 import { setCategoryForElementSearching } from '../../store/fetch-category-store';
+import { fetchFoodsByCategory } from '../../store/fetch-food-by-category-store'; 
 import { Button } from 'primereact/button';
         
 
@@ -41,7 +42,8 @@ function SingleCategory(props) {
    
 ])
     const setCat= ()=>{
-        setCategoryForElementSearching(props.category.id)
+        dispatch(setCategoryForElementSearching(props.category.id));
+        dispatch(fetchFoodsByCategory(props.category.id));
     }
  
   return (
@@ -49,8 +51,8 @@ function SingleCategory(props) {
 
       <div className="">
             {categoryState.categoryIdForSearchingElements === props.category.id ?
-                <div onClick={()=>dispatch(setCategoryForElementSearching(props.category.id))} class="bg-green-200 rounded-md m-3 "><p class="px-7 py-8 text-center text-neutral-800">{props.category.nom}  </p></div> :
-                <div onClick={()=>dispatch(setCategoryForElementSearching(props.category.id))} class="bg-slate-200 rounded-md m-3 "><p class="px-7 py-8 text-center text-neutral-800">{props.category.nom}  </p></div>
+                <div onClick={()=>setCat()} class="bg-green-200 rounded-md m-3 "><p class="px-7 py-8 text-center text-neutral-800">{props.category.nom}  </p></div> :
+                <div onClick={()=>setCat()} class="bg-slate-200 rounded-md m-3 "><p class="px-7 py-8 text-center text-neutral-800">{props.category.nom}  </p></div>
            
              } 
          </div>

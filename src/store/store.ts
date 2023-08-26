@@ -7,11 +7,13 @@ import addFoodSlice from './food-store';
 import fetchCategorySlice from './fetch-category-store';
 import  fetchFoodSlice  from './fetch-food-store';
 import  deleteFoodSlice  from './delete-food-store';
+import  fetchFoodByCategorySlice  from './fetch-food-by-category-store';
 
 const reducers = combineReducers({
   authSlice,
   addFoodSlice,
   fetchCategorySlice,
+  fetchFoodByCategorySlice,
   fetchFoodSlice,
   deleteFoodSlice,
 });

@@ -1,14 +1,14 @@
 import { FoodModel } from "./food-model";
 
 export class SingleElementInCommande {
-    private element : FoodModel;
-    private qtt : number;
+     element : FoodModel;
+     qtt : number;
     
   
   
     constructor(element:FoodModel,qtt:number) {
-      element : element;
-       qtt : qtt;
+      this.element = element;
+       this.qtt = qtt;
 
 
     }

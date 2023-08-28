@@ -14,6 +14,7 @@ import CommandModel from "../models/command_model";
 export interface FetchCommandState{
     entities : CommandModel[],
     loading : 'idle' | 'pending' | 'succeded' | 'failed',
+    changeStateVisible : any
 }
 
 
@@ -21,6 +22,7 @@ export interface FetchCommandState{
 export const initialStateOfFetchCommand : FetchCommandState = {
     entities : [],
     loading : 'idle',
+    changeStateVisible : [false,""]
 
 }
 
@@ -55,10 +57,14 @@ export const fetchCommand = createAsyncThunk(
 
 
 export const fetchCommandSlice = createSlice({
-    name: 'fetcommand',
+    name: 'fetchCommand',
     initialState: initialStateOfFetchCommand,
     reducers: {
-    
+        setChangeStateVisible: (state,action)=>{
+            
+            state.changeStateVisible = action.payload;
+            console.log(state.changeStateVisible)
+        }
     },
      extraReducers : (builder) =>{
        
@@ -77,11 +83,13 @@ export const fetchCommandSlice = createSlice({
         builder.addCase(fetchCommand.fulfilled,(state,action)=>{
             state.loading = 'succeded';
             state.entities = action.payload
+            state.changeStateVisible(false)
            
         });
     } 
 })
 
 export default fetchCommandSlice.reducer;
+export const {setChangeStateVisible} = fetchCommandSlice.actions;
 
 

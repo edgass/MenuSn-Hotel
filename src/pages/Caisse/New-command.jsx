@@ -1,5 +1,5 @@
 import React, { useState,useRef,useEffect } from 'react';
-
+import { getCommand } from '../../store/change-command-state-store';
 import './Caisse.css';
 
 import Sidebar from '../../partials/Sidebar';
@@ -21,6 +21,7 @@ import { FoodModel } from '../../models/food-model';
 import { ConfirmDeleteFoodModal } from '../confirm_delete_food_modal';
 import UpdateFood2 from '../update-food';
 import { fetchCategory } from '../../store/fetch-category-store';
+import SingleElementInNewCommand from './single-element-in -newCommand';
         
 
 function NewCommand() {
@@ -35,17 +36,26 @@ function NewCommand() {
 
 }
   const dispatch = useDispatch();
-  const fetchState = useAppSelector(state=>state.fetchFoodSlice);
+  const changeCommandeState = useAppSelector(state=>state.changeCommandStateSlice);
   const deleteState = useAppSelector(state=>state.deleteFoodSlice);
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [visible, setVisible] = useState(false);
   const [updateFoodVisible, setUpdateFoodVisible] = useState(false);
   const [deleteFoodVisible, setDeleteFoodVisible] = useState(false);
   const [foodToUpdate, setFoodToUpdate] = useState(new FoodModel('','','','','',0));
+  const [PT, setPT] = useState(0);
 
   useEffect(()=>{
-    dispatch(fetchFoods());
-    dispatch(fetchCategory());
+    dispatch(getCommand());
+    var pt = 0;
+    let i;
+    console.log(changeCommandeState.commandInCaisseEntities)
+    for(i=0;i<changeCommandeState.commandInCaisseEntities.length;i++){
+      
+        pt = pt + parseInt(changeCommandeState.commandInCaisseEntities[i].element.prix * changeCommandeState.commandInCaisseEntities[i].qtt);
+    }
+    console.log(PT);
+    setPT(pt);
   },[
     dispatch
 ])
@@ -67,45 +77,21 @@ function NewCommand() {
                     Quantité
                 </th>
                 <th scope="col" class="px-6 py-3">
-                    PT
+                    PU
                 </th>
             </tr>
         </thead>
         <tbody>
-            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                    Hamburger
-                </th>
-                <td class="px-6 py-4">
-                    2
-                </td>
-                <td class="px-6 py-4">
-                    7000 FCFA
-                </td>
-            </tr>
-            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                    Thiébou Dieune
-                </th>
-                <td class="px-6 py-4">
-                    1
-                </td>
-                <td class="px-6 py-4">
-                    4000 FCFA
-                </td>
-            </tr>
-            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                    Jus de Limon
-                </th>
-                <td class="px-6 py-4">
-                    2
-                </td>
-                <td class="px-6 py-4">
-                    1000 FCFA
-                </td>
-            </tr>
-
+            {
+                changeCommandeState.commandInCaisseEntities.length == 0 ?
+                <h3 className='text-center'>Nouvelle Commande ! ajouter vos plats.</h3> :
+                changeCommandeState.commandInCaisseEntities.map((el)=>{
+                   return(
+                    <SingleElementInNewCommand element= {el} />
+                   )
+                })
+            }
+           
             
         </tbody>
     </table>

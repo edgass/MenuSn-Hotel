@@ -2,13 +2,14 @@ import db from "../firebase.config";
 import { getFirestore, collection, addDoc,query, where, getDocs, deleteDoc, doc, getDoc  } from "firebase/firestore";
 import { HotelModel } from "../models/hotel-model";
 import { CategoryModel } from "../models/category";
-import { useDispatch } from "react-redux";
 
 
 //const elementsCollectionRef = collection(db, "elements");
 
+
 export class FoodService{
 
+  
  
  // async getAllElements(catId:string) : Promise<Element[]>{
     async getAllElements() : Promise<Element[]>{
@@ -160,6 +161,37 @@ return visibility;
      
      }
  }
+
+ async changeCommandState(commandId:string, state:string):Promise<boolean>{
+  var success = false;
+  try{
+   console.log(commandId);
+       // Ajouter un nouveau document à la collection "commandes"
+       let docSnap = db.collection("commande").doc(commandId);
+       console.log(docSnap.id)
+     
+
+       docSnap.update({
+        state : state,
+    })
+    .then((e) => {
+        console.log("Document successfully updated!", e);
+    success = true;
+    })
+    .catch((error) => {
+        // The document probably doesn't exist.
+        console.error("Error updating document: ", error);
+        
+    });
+
+   
+  }catch(e){
+      console.log(e);
+      return false;
+  
+  }
+  return success;
+}
 
     async deleteFood(foodId:string){
        

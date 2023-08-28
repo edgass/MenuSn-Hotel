@@ -1,6 +1,7 @@
 import React, { useState,useRef,useEffect } from 'react';
 
 import './Caisse.css';
+import { removeAllElementInCommand } from '../../store/change-command-state-store';
 
 import Sidebar from '../../partials/Sidebar';
 import Header from '../../partials/Header';
@@ -35,7 +36,7 @@ function CaisseActions() {
 
 }
   const dispatch = useDispatch();
-  const fetchState = useAppSelector(state=>state.fetchFoodSlice);
+  const changeCommandeState = useAppSelector(state=>state.changeCommandStateSlice);
   const deleteState = useAppSelector(state=>state.deleteFoodSlice);
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [visible, setVisible] = useState(false);
@@ -44,11 +45,11 @@ function CaisseActions() {
   const [foodToUpdate, setFoodToUpdate] = useState(new FoodModel('','','','','',0));
 
   useEffect(()=>{
-    dispatch(fetchFoods());
-    dispatch(fetchCategory());
+
   },[
     dispatch
 ])
+
 
   return (
 
@@ -56,7 +57,7 @@ function CaisseActions() {
       <div className="">
         <div class="grid md:grid-cols-3 md:grid-cols-2 lg:grid-cols-3">
           <div class="bg-green-500 rounded-md m-3 "><p class="px-7 py-8 text-center text-white">Fond de Caisse</p></div>
-          <div class="bg-green-500 rounded-md m-3"><p  class="px-7 py-8 text-center text-white">Nouvelle Commande</p></div>
+          <div onClick={()=>dispatch(removeAllElementInCommand())} class="bg-green-500 rounded-md m-3"><p  class="px-7 py-8 text-center text-white">Nouvelle Commande</p></div>
           <div class="bg-green-500 rounded-md m-3"><p class="px-7 py-8 text-center text-white">Fond de Caisse</p></div>
           <div class="bg-green-500 rounded-md m-3"><p class="px-7 py-8 text-center text-white">Fond de Caisse</p></div>
         </div>

@@ -27,6 +27,7 @@ import NewCommand from './New-command';
 import ListeCommand from './Liste-command';
 import CaisseCategorys from './Categorys';
 import CaisseElements from './CaissesElements';
+import { ChangeState } from './change-state';
         
 
 function Caisse() {
@@ -42,11 +43,11 @@ function Caisse() {
 }
   const dispatch = useDispatch();
   const fetchState = useAppSelector(state=>state.fetchFoodSlice);
-  const deleteState = useAppSelector(state=>state.deleteFoodSlice);
+  const changeStateState = useAppSelector(state=>state.fetchCommandSlice);
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [visible, setVisible] = useState(false);
   const [updateFoodVisible, setUpdateFoodVisible] = useState(false);
-  const [deleteFoodVisible, setDeleteFoodVisible] = useState(false);
+  const [changeStateVisible, setChangeStateVisible] = useState(false);
   const [foodToUpdate, setFoodToUpdate] = useState(new FoodModel('','','','','',0));
 
   useEffect(()=>{
@@ -58,6 +59,12 @@ function Caisse() {
 
   return (
     <div className='relative flex flex-col flex-1 overflow-y-auto overflow-x-hidden '>
+
+        {
+          changeStateState.changeStateVisible[0]?  <ChangeState/> : null
+        }
+         
+        
 
       {/*  Site header */}
       <Header sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />

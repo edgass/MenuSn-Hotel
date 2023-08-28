@@ -1,4 +1,5 @@
 import React, { useState,useRef,useEffect } from 'react';
+import { setSelectedElement, setCommand } from '../../store/change-command-state-store';
 
 import './Caisse.css';
 
@@ -23,6 +24,7 @@ import { ConfirmDeleteFoodModal } from '../confirm_delete_food_modal';
 import UpdateFood2 from '../update-food';
 import { fetchCategory } from '../../store/fetch-category-store';
 import { fetchFoodsByCategory } from '../../store/fetch-food-by-category-store';
+import SingleElementInCommande from '../../models/single-element-in-command';
         
 
 function CaisseElements() {
@@ -30,7 +32,7 @@ function CaisseElements() {
 
   const dispatch = useDispatch();
   const fetchFoodByCategoryState = useAppSelector(state=>state.fetchFoodByCategorySlice);
-  const categoryState = useAppSelector(state=>state.fetchCategorySlice);
+  const changeCommandeState = useAppSelector(state=>state.changeCommandStateSlice);
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [visible, setVisible] = useState(false);
   const [updateFoodVisible, setUpdateFoodVisible] = useState(false);
@@ -55,7 +57,10 @@ function CaisseElements() {
                                             fetchFoodByCategoryState.entities.map((tab)=>{
                                           
                                                 return(
-                                                  <div class="bg-zinc-200 rounded-md m-3 ">
+                                                  <div onClick={()=>{
+                                                    dispatch(setCommand(new SingleElementInCommande(tab[0],1)));
+                                                    dispatch(setSelectedElement(tab[0]))
+                                                  }} class="bg-zinc-200 rounded-md m-3 ">
                                                   <img src={tab[0].imagepath} class="object-cover h-24 w-48"/>
                                                   <p> {tab[0].name} - {tab[0].prix}FCFA </p>
                                                 </div>

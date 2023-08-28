@@ -38,7 +38,6 @@ function ListeCommand() {
 
 }
   const dispatch = useDispatch();
-  const fetchState = useAppSelector(state=>state.fetchFoodSlice);
   const fetchCommandState = useAppSelector(state=>state.deleteFoodSlice);
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [visible, setVisible] = useState(false);

@@ -66,7 +66,15 @@ function NewCommand() {
       <div className="">
         
 <div class="">
-    <h4 class="mb-2 ml-2">Nouvelle Commande</h4>
+    <div className=''>
+    <h4 class="mb-2 ml-2 float-left">Nouvelle Commande</h4>
+    {
+        changeCommandeState.commandInCaisseEntities.length>0 ? 
+        <button class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded float-right">Valider Commande</button> : null
+    }
+   
+    </div>
+    
     <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
         <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
             <tr>

@@ -15,6 +15,7 @@ export interface ActivationCommandCredentials {
 export interface ChangeCommandStateState{
     entities : FoodModel[],
     commandInCaisseEntities: SingleElementInCommande[],
+    currentQtt :string,
     selectedElement : FoodModel | null
     loading : 'idle' | 'pending' | 'succeded' | 'failed',
 
@@ -24,6 +25,7 @@ export interface ChangeCommandStateState{
 export const initialStateOfAddFood : ChangeCommandStateState = {
     commandInCaisseEntities : [],
     selectedElement: new FoodModel("","","","","",0,""),
+    currentQtt : "",
     entities : [],
     loading : 'idle',
     
@@ -132,6 +134,36 @@ export const changeCommandStateSlice = createSlice({
         removeAllElementInCommand : (state,action)=>{
             state.commandInCaisseEntities = []; 
             localStorage.removeItem("commandInCaisse");
+        },
+
+        changeCurrentElementQuantity:(state,action)=>{
+            var i=0;
+            var newElementCopyArray : SingleElementInCommande[];
+            newElementCopyArray = [];
+            for(i=0;i<state.commandInCaisseEntities.length;i++){
+                if(state.commandInCaisseEntities[i].element.name !== state.selectedElement?.name && state.commandInCaisseEntities[i].element.prix !== state.selectedElement?.prix){
+                    newElementCopyArray = [...newElementCopyArray,state.commandInCaisseEntities[i]];
+                    
+                }else{
+                    newElementCopyArray = [...newElementCopyArray,new SingleElementInCommande(state.commandInCaisseEntities[i].element,action.payload)];
+                    
+                }
+            }
+            state.commandInCaisseEntities = newElementCopyArray;
+           
+            localStorage.setItem("commandInCaisse",JSON.stringify(state.commandInCaisseEntities));
+        },
+
+        setCurrentQuantity:(state,action)=>{
+            console.log(action)
+            if(state.currentQtt==""){
+              state.currentQtt = action.payload
+            }else{
+            state.currentQtt = state.currentQtt+action.payload
+              
+            }
+            
+            console.log(state.currentQtt)
         }
     },
      extraReducers : (builder) =>{
@@ -157,5 +189,5 @@ export const changeCommandStateSlice = createSlice({
 
 
 export default changeCommandStateSlice.reducer;
-export const {getCommand,setCommand,setSelectedElement,removeAllElementInCommand} = changeCommandStateSlice.actions
+export const {getCommand,setCommand,setSelectedElement,removeAllElementInCommand,changeCurrentElementQuantity,setCurrentQuantity} = changeCommandStateSlice.actions
 

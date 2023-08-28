@@ -83,7 +83,6 @@ export const fetchCommandSlice = createSlice({
         builder.addCase(fetchCommand.fulfilled,(state,action)=>{
             state.loading = 'succeded';
             state.entities = action.payload
-            state.changeStateVisible(false)
            
         });
     } 

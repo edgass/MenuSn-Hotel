@@ -1,4 +1,5 @@
 import React, { useState,useRef,useEffect } from 'react';
+import { setCurrentQuantity,changeCurrentElementQuantity } from '../../store/change-command-state-store';
 
 import './Caisse.css';
 
@@ -35,38 +36,37 @@ function NumPad() {
 
 }
   const dispatch = useDispatch();
-  const fetchState = useAppSelector(state=>state.fetchFoodSlice);
+  const changeCommandeState = useAppSelector(state=>state.changeCommandStateSlice);
   const deleteState = useAppSelector(state=>state.deleteFoodSlice);
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [visible, setVisible] = useState(false);
   const [updateFoodVisible, setUpdateFoodVisible] = useState(false);
   const [deleteFoodVisible, setDeleteFoodVisible] = useState(false);
-  const [foodToUpdate, setFoodToUpdate] = useState(new FoodModel('','','','','',0));
+  const [qttToSet, setQttToSet] = useState("");
 
   useEffect(()=>{
-    dispatch(fetchFoods());
-    dispatch(fetchCategory());
+  
   },[
     dispatch
 ])
+
+  var numPad = ['7','8','9','4','5','6','1','2','3','0']
 
   return (
 
 
       <div className="">
         <div class="grid grid-cols-3 gap-1">
-          <div class="bg-slate-400 px-7 py-8"><p class="px-3 text-center text-white">7</p></div>
-          <div class="bg-slate-400 px-7 py-8"><p class="px-3 text-center text-white">8</p></div>
-          <div class="bg-slate-400 px-7 py-8"><p class="px-3 text-center text-white">9</p></div>
-          <div class="bg-slate-400 px-7 py-8"><p class="px-3 text-center text-white">4</p></div>
-          <div class="bg-slate-400 px-7 py-8"><p class="px-3 text-center text-white">5</p></div>
-          <div class="bg-slate-400 px-7 py-8"><p class="px-3 text-center text-white">6</p></div>
-          <div class="bg-slate-400 px-7 py-8"><p class="px-3 text-center text-white">1</p></div>
-          <div class="bg-slate-400 px-7 py-8"><p class="px-3 text-center text-white">2</p></div>
-          <div class="bg-slate-400 px-7 py-8"><p class="px-3 text-center text-white">3</p></div>
-          <div class="bg-slate-400 px-7 py-8"><p class="px-3 text-center text-white">0</p></div>
-          <div class="bg-slate-400 px-7 py-8"><p class="px-3 text-center text-white">.</p></div>
-          <div class="bg-sky-700 px-7 py-8"><p class="px-3 text-center text-white">C</p></div>
+         { numPad.map((element) => {
+          return(
+            <div onClick={()=>{
+             dispatch(setCurrentQuantity(element));
+            }} class="bg-slate-400 px-7 py-8"><p class="px-3 text-center text-white">{element}</p></div>
+          )
+          })}
+        
+          <div class="bg-blue-400 px-7 py-8"><p class="px-3 text-center text-white">Reinitialiser</p></div>
+          <div onClick={()=>{dispatch(changeCurrentElementQuantity(parseInt(changeCommandeState.currentQtt)))}} class="bg-sky-700 px-7 py-8"><p class="px-3 text-center text-white">Valider</p></div>
         </div>
       </div>
  

@@ -34,6 +34,9 @@ export const store = configureStore({
   reducer: persistedReducer,
 
   middleware:[thunk]
+
+
+  
 })
 
 export default store;

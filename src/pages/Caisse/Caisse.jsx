@@ -1,5 +1,8 @@
 import React, { useState,useRef,useEffect } from 'react';
 
+import { Message } from 'primereact/message';
+        
+
 import './Caisse.css';
 
 import Sidebar from '../../partials/Sidebar';
@@ -28,6 +31,7 @@ import ListeCommand from './Liste-command';
 import CaisseCategorys from './Categorys';
 import CaisseElements from './CaissesElements';
 import { ChangeState } from './change-state';
+import Alert from '../../partials/header/alert';
         
 
 function Caisse() {
@@ -68,6 +72,7 @@ function Caisse() {
 
       {/*  Site header */}
       <Header sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
+     
       <div className="h-screen">
         <div class="p-3 grid gap-4 grid-cols-3 myGrid">
           <div class="relative overflow-x-auto">
@@ -87,7 +92,7 @@ function Caisse() {
           <div class="col-span-5 relative overflow-x-auto overflow-y-auto">
             <CaisseElements/>
           </div>
-          <div class="col-span-4 bg-orange-50 relative overflow-x-auto overflow-y-auto">
+          <div class="col-span-4 bg-slate-50 relative overflow-x-auto overflow-y-auto">
             <ListeCommand/>
           </div>
         </div>

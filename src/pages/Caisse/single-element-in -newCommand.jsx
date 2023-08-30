@@ -63,7 +63,7 @@ function SingleElementInNewCommand(props) {
                     {props.element.element.name}
                 </th>
                 <td class="px-6 py-4">
-                {props.element.qtt}
+                {props.element.quantity}
                 </td>
                 <td class="px-6 py-4">
                 {props.element.element.prix} FCFA

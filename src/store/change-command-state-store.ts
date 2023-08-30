@@ -83,15 +83,13 @@ export const changeCommandStateSlice = createSlice({
                 }else{
 
                     const actualValues = JSON.parse(storedValue ?? "");
-                    console.log("commandes dans la cache actuel : ")
-                    console.log(storedValue)
                     const element = actualValues.find((el: { element: { name: any; prix: any; }; }) => el.element.name === action.payload.element.name && el.element.prix === action.payload.element.prix);
                     if(element !== null && element !== undefined){
                         console.log(element)
                         actualValues.map((item: SingleElementInCommande)=>{
                             if(item.element.name === action.payload.element.name && item.element.prix === action.payload.element.prix){
                                 console.log("it exist")
-                                const newQtt = item.qtt+action.payload.qtt
+                                const newQtt = item.quantity+action.payload.quantity
                                 const newValueOfExistedElementInCommand = new SingleElementInCommande(action.payload.element,parseInt(newQtt))
                                 state.commandInCaisseEntities = [...state.commandInCaisseEntities, newValueOfExistedElementInCommand]
                             }else{

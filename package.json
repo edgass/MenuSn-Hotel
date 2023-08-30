@@ -30,7 +30,8 @@
     "react-router-dom": "^6.8.1",
     "react-transition-group": "^4.4.5",
     "redux-persist": "^6.0.0",
-    "redux-thunk": "^2.4.2"
+    "redux-thunk": "^2.4.2",
+    "sweetalert2": "^11.7.27"
   },
   "devDependencies": {
     "@vitejs/plugin-react": "^3.1.0",

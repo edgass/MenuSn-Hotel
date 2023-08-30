@@ -22,6 +22,7 @@ import { ConfirmDeleteFoodModal } from '../confirm_delete_food_modal';
 import UpdateFood2 from '../update-food';
 import { fetchCategory } from '../../store/fetch-category-store';
 import SingleElementInNewCommand from './single-element-in -newCommand';
+import { postNewCommand } from '../../store/post-command-store';
         
 
 function NewCommand() {
@@ -37,6 +38,7 @@ function NewCommand() {
 }
   const dispatch = useDispatch();
   const changeCommandeState = useAppSelector(state=>state.changeCommandStateSlice);
+  const postNewCommandState = useAppSelector(state=>state.postCommandSlice);
   const deleteState = useAppSelector(state=>state.deleteFoodSlice);
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [visible, setVisible] = useState(false);
@@ -51,7 +53,7 @@ function NewCommand() {
     let i;
     console.log(changeCommandeState.commandInCaisseEntities)
     for(i=0;i<changeCommandeState.commandInCaisseEntities.length;i++){
-      
+       
         pt = pt + parseInt(changeCommandeState.commandInCaisseEntities[i].element.prix * changeCommandeState.commandInCaisseEntities[i].qtt);
     }
     console.log(PT);
@@ -70,7 +72,9 @@ function NewCommand() {
     <h4 class="mb-2 ml-2 float-left">Nouvelle Commande</h4>
     {
         changeCommandeState.commandInCaisseEntities.length>0 ? 
-        <button class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded float-right">Valider Commande</button> : null
+        postNewCommandState.loading == "pending" ?
+        <h4 className='float-right'>En cours d'envoie...</h4> : 
+        <button onClick={()=>dispatch(postNewCommand())} class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded float-right">Valider Commande</button> : null
     }
    
     </div>

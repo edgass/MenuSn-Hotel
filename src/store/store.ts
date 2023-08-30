@@ -10,6 +10,7 @@ import  deleteFoodSlice  from './delete-food-store';
 import  fetchFoodByCategorySlice  from './fetch-food-by-category-store';
 import fetchCommandSlice from './fetch-command-store';
 import changeCommandStateSlice from './change-command-state-store';
+import postCommandSlice from './post-command-store';
 
 const reducers = combineReducers({
   authSlice,
@@ -18,6 +19,7 @@ const reducers = combineReducers({
   fetchFoodByCategorySlice,
   fetchCommandSlice,
   changeCommandStateSlice,
+  postCommandSlice,
   fetchFoodSlice,
   deleteFoodSlice,
 });
@@ -36,7 +38,7 @@ export const store = configureStore({
   middleware:[thunk]
 
 
-  
+
 })
 
 export default store;

@@ -33,10 +33,11 @@ import { ChangeState } from './change-state';
 import Alert from '../../partials/header/alert';
 import CaisseHeader from '../../partials/Caisse-Header';
 import OuvertureCaisse from './Ouverture-Caisse-Modal';
-import NoCaisse from './no-caisse';
+import { Button } from 'primereact/button';
+import { ouvrirSessionCaisse } from '../../store/ouverture-session-caisse-store';
         
 
-function Caisse() {
+function NoCaisse() {
 
 
   
@@ -56,6 +57,8 @@ function Caisse() {
   const [changeStateVisible, setChangeStateVisible] = useState(false);
   const [foodToUpdate, setFoodToUpdate] = useState(new FoodModel('','','','','',0));
   const ouvrirSessionCaisseState = useAppSelector(state=>state.ouvrirSessionCaisseSlice);
+  
+  const state = useAppSelector(state=>state.authSlice);
 
   useEffect(()=>{
     dispatch(fetchFoods());
@@ -67,54 +70,15 @@ function Caisse() {
   return (
     
     
-    <div className='relative flex flex-col flex-1 overflow-y-auto overflow-x-hidden '>
-
-        {
-          
-          changeStateState.changeStateVisible[0]?  <ChangeState/> : null
-        }
-         
-         {
-          ouvrirSessionCaisseState.ouvertureSessionModalOpen ? <OuvertureCaisse/> : null
-         }
-        
-
-      {/*  Site header */}
-      <CaisseHeader sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
-     
-     {
-      ouvrirSessionCaisseState.currentCaisseId == null | ouvrirSessionCaisseState.currentCaisseId == undefined ? 
-      <div className='grid place-items-center h-screen'>
-        <NoCaisse/>
-      </div> :
+    <div className='text-center'>
+      <h1 className='mb-1'>Aucune caisse n'est ouverte</h1>
+      <p className='mb-1'>Pour pouvoir effectuer des opérations, ouvrez une caisse en cliqaunt sur le bouton ci dissous.</p>
+      {
+        ouvrirSessionCaisseState.loading == "true" ?   <Button loading="true" severity="danger" label="Ouvrir la caisse"/> :   <Button onClick={()=>dispatch(ouvrirSessionCaisse(state.user.uid))} severity="danger" label="Ouvrir la caisse"/>
+      }
     
-      <div className="h-screen">*
-        <div class="p-3 grid gap-4 grid-cols-3 myGrid">
-          <div class="relative overflow-x-auto">
-            <NewCommand/>
-          </div>
-          <div class="bg-slate-50 relative overflow-x-auto">
-            <NumPad/>
-          </div>
-          <div class="bg-slate-100 relative overflow-x-auto">
-            <CaisseActions/>
-          </div>
-        </div>
-        <div class="grid grid-flow-row-dense grid-cols-12 myGrid">
-          <div class="col-span-3 bg-slate-50">
-            <CaisseCategorys/>
-          </div>
-          <div class="col-span-5 relative overflow-x-auto overflow-y-auto">
-            <CaisseElements/>
-          </div>
-          <div class="col-span-4 bg-slate-50 relative overflow-x-auto overflow-y-auto">
-            <ListeCommand/>
-          </div>
-        </div>
-      </div>
-       }
     </div>
   );
 }
 
-export default Caisse;
+export default NoCaisse;

@@ -55,9 +55,9 @@ function CaisseElements() {
         {fetchFoodByCategoryState.loading == 'pending' ? <div><p>En cours de chargement !!</p></div> :
           fetchFoodByCategoryState.entities?.length === 0 ? <div><p>Aucun élément de cette catégorie n'a été trouvé</p></div> :
                                             fetchFoodByCategoryState.entities.map((tab)=>{
-                                          
+
                                                 return(
-                                                  <div onClick={()=>{
+                                                  <div key={tab[0].id} onClick={()=>{
                                                     dispatch(setCommand(new SingleElementInCommande(tab[0],1)));
                                                     dispatch(setSelectedElement(tab[0]))
                                                   }} class="bg-zinc-200 rounded-md m-3 ">

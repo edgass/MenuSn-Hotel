@@ -28,32 +28,29 @@ import SingleCommand from './single-command';
 
 function ListeCommand() {
 
-
-  
-
-  const toast = useRef(null);
-
   const displayMessage = (severity,summary,details,life) => {
      toast.current.show({ severity: severity, summary: summary, detail: details, life: life });
 
 }
   const dispatch = useDispatch();
-  const [sidebarOpen, setSidebarOpen] = useState(false);
   const [visible, setVisible] = useState(false);
   const [updateFoodVisible, setUpdateFoodVisible] = useState(false);
   const [deleteFoodVisible, setDeleteFoodVisible] = useState(false);
   const [listOfCommandToShow, setListOfCommandToShow] = useState([]);
   const [listOfCommandFromDatase, setListOfCommandFromDatabase] = useState([]);
-  const [listOfCommandSearched, setListOfCommandSearched] = useState([]);
+
 
 
   function filterElements (idToSearch){
     //let a = ["foo","fool","cool","god"];
-    if(idToSearch == "" | idToSearch == null){
+   
+    if(idToSearch === "" || idToSearch === null || idToSearch === undefined){
+        
         setListOfCommandToShow(listOfCommandFromDatase);
     }else{
-        let term = idToSearch;
-        let b = listOfCommandToShow.filter(item => item.id.toLowerCase().indexOf(term.toLowerCase()) > -1);
+    
+        let b = listOfCommandFromDatase.filter(item => item.id.toLowerCase().indexOf(idToSearch.toLowerCase()) > -1);
+        console.log(b)
             setListOfCommandToShow(b);
        
     }
@@ -64,11 +61,12 @@ function ListeCommand() {
    
 db.collection("commande").orderBy("state")
 .onSnapshot((snap) => {
-   setListOfCommandFromDatabase([])
+    setListOfCommandToShow([])
+    setListOfCommandFromDatabase([])
     snap.forEach((doc) => {
-        var data = doc;
-        setListOfCommandFromDatabase(arr=>[...arr,data]);
-        setListOfCommandToShow(listOfCommandFromDatase);
+      
+        setListOfCommandFromDatabase(arr=>[...arr,doc]);
+        setListOfCommandToShow(arr=>[...arr,doc]);
         
 });
 
@@ -102,7 +100,7 @@ db.collection("commande").orderBy("state")
             </tr>
         </thead>
         <tbody>
-        <input onChange={(e)=>{filterElements(e.target.value)}} type="text" placeholder='Rechercher...' id="default-input" class="m-2 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"/>
+        <input onChange={(e)=>filterElements(e.target.value)} type="text" placeholder='Rechercher...' id="default-input" class="m-2 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"/>
             {
                 listOfCommandToShow.map((cmd)=>{
                    return(

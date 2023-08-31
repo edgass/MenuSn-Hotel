@@ -10,6 +10,7 @@ import  deleteFoodSlice  from './delete-food-store';
 import  fetchFoodByCategorySlice  from './fetch-food-by-category-store';
 import fetchCommandSlice from './fetch-command-store';
 import changeCommandStateSlice from './change-command-state-store';
+import ouvrirSessionCaisseSlice  from './ouverture-session-caisse-store';
 import postCommandSlice from './post-command-store';
 
 const reducers = combineReducers({
@@ -19,6 +20,7 @@ const reducers = combineReducers({
   fetchFoodByCategorySlice,
   fetchCommandSlice,
   changeCommandStateSlice,
+  ouvrirSessionCaisseSlice,
   postCommandSlice,
   fetchFoodSlice,
   deleteFoodSlice,

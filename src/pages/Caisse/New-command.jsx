@@ -72,7 +72,7 @@ function NewCommand() {
     <h4 class="mb-2 ml-2 float-left">Nouvelle Commande</h4>
     {
         changeCommandeState.commandInCaisseEntities.length>0 ? 
-        postNewCommandState.loading == "pending" ?
+        postNewCommandState.loading === "pending" ?
         <h4 className='float-right'>En cours d'envoie...</h4> : 
         <button onClick={()=>dispatch(postNewCommand())} class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded float-right">Valider Commande</button> : null
     }

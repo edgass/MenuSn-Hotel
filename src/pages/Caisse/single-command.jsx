@@ -44,7 +44,7 @@ function SingleCommand(props) {
 
     for(i=0;i<props.command.data().elements.length;i++){
       
-        pt = pt + parseInt(props.command.data().elements[i].element.prix * props.command.data().elements[i].qtt);
+        pt = pt + parseInt(props.command.data().elements[i].element.prix * props.command.data().elements[i].quantity);
     }
     setPT(pt);
   },[

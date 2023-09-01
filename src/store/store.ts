@@ -12,6 +12,7 @@ import fetchCommandSlice from './fetch-command-store';
 import changeCommandStateSlice from './change-command-state-store';
 import ouvrirSessionCaisseSlice  from './ouverture-session-caisse-store';
 import postCommandSlice from './post-command-store';
+import recuperationSessionActiveSlice from './recuperation-session-active-store';
 
 const reducers = combineReducers({
   authSlice,
@@ -21,6 +22,7 @@ const reducers = combineReducers({
   fetchCommandSlice,
   changeCommandStateSlice,
   ouvrirSessionCaisseSlice,
+  recuperationSessionActiveSlice,
   postCommandSlice,
   fetchFoodSlice,
   deleteFoodSlice,

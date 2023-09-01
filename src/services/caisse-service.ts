@@ -2,6 +2,7 @@ import db from "../firebase.config";
 import { getFirestore, collection, addDoc,query, where, getDocs, deleteDoc, doc, getDoc  } from "firebase/firestore";
 import { HotelModel } from "../models/hotel-model";
 import { CategoryModel } from "../models/category";
+import { SessionCaisseModel } from "../models/session-caisse-model";
 
 
 //const elementsCollectionRef = collection(db, "elements");
@@ -35,26 +36,27 @@ export class CaisseService{
     }
 }
 
-async getAllElementsByCategory(catId:string) : Promise<Element[]>{
+async getActiveSession() : Promise<SessionCaisseModel | undefined>{
        
-  var elements : Element[] = [];
+  
   try{
-      const resp = db.collection('elements');
+      const resp = db.collection('session');
       // var data= await resp.get();
-       var data= await resp.where('hotelId' ,'==', 'HOnjOpu9qarlYU1SZzny').where('categoryId','==',catId).get();
-   
-           data.docs.forEach(item=>{
-           
-             elements = [...elements,[item.data(),item.id]] as Element[];
-             
-        //  var element : Element = new Element(item.id,item.data().name,item.data().userId,item.data().name,item.data().prix,item.data().image,item.data().description);
-          //   elements = [...elements,element] as Element[];
-              })
-         //  console.log(elements)
-                       return elements;  
+       var data= await resp.where('active' ,'==', true).get();
+      
+          if(!data.empty){
+            var activeSession = data.docs[0].data();
+            console.log(activeSession)
+            return new SessionCaisseModel(activeSession.active,activeSession.fermetureTimestamp,activeSession.ouvertureTimestamp,activeSession.fondDeCaisse,activeSession.userId)
+            
+          }else{
+            return undefined;
+          }
+        
+        
   }catch(e){
       console.log(e);
-      return elements
+     
   }
 }
 
@@ -205,6 +207,13 @@ return visibility;
     async postNewCaisse(userId:string){
        
       try{
+
+        this.getActiveSession().then((session)=>{
+          if(session == undefined || session == null){
+            return null;
+          }
+        })
+        
         const timestamp = new Date().getTime();
   const docRef = await addDoc(collection(db, "session"), {
     

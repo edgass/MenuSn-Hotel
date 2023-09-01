@@ -1,4 +1,5 @@
 import React, { useState,useRef,useEffect } from 'react';
+import { recupererSessionActive } from '../../store/recuperation-session-active-store';
 
 import { Message } from 'primereact/message';
         
@@ -56,10 +57,13 @@ function Caisse() {
   const [changeStateVisible, setChangeStateVisible] = useState(false);
   const [foodToUpdate, setFoodToUpdate] = useState(new FoodModel('','','','','',0));
   const ouvrirSessionCaisseState = useAppSelector(state=>state.ouvrirSessionCaisseSlice);
+  const recuperationSessionActiveState = useAppSelector(state=>state.recuperationSessionActiveSlice);
 
   useEffect(()=>{
+    dispatch(recupererSessionActive());
     dispatch(fetchFoods());
     dispatch(fetchCategory());
+    
   },[
     dispatch
 ])
@@ -71,7 +75,7 @@ function Caisse() {
 
         {
           
-          changeStateState.changeStateVisible[0]?  <ChangeState/> : null
+          changeStateState.changeStateVisible[0] ?  <ChangeState/> : null
         }
          
          {
@@ -83,12 +87,9 @@ function Caisse() {
       <CaisseHeader sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
      
      {
-      ouvrirSessionCaisseState.currentCaisseId == null | ouvrirSessionCaisseState.currentCaisseId == undefined ? 
-      <div className='grid place-items-center h-screen'>
-        <NoCaisse/>
-      </div> :
+      recuperationSessionActiveState.entities !== null & recuperationSessionActiveState.entities !== undefined ? 
     
-      <div className="h-screen">*
+      <div className="h-screen">
         <div class="p-3 grid gap-4 grid-cols-3 myGrid">
           <div class="relative overflow-x-auto">
             <NewCommand/>
@@ -111,7 +112,10 @@ function Caisse() {
             <ListeCommand/>
           </div>
         </div>
-      </div>
+      </div> :
+       <div className='grid place-items-center h-screen'>
+       <NoCaisse/>
+     </div> 
        }
     </div>
   );

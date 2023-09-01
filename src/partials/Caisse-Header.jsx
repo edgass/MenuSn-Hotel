@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import SearchModal from './header/SearchModal';
 import Notifications from './header/Notifications';
 import Help from './header/Help';
@@ -13,9 +13,23 @@ function CaisseHeader({
   setSidebarOpen
 }) {
 
+
+ 
+
+
   const [searchModalOpen, setSearchModalOpen] = useState(false)
   const ouvrirSessionCaisseState = useAppSelector(state=>state.ouvrirSessionCaisseSlice);
+  const recuperationSessionActiveState = useAppSelector(state=>state.recuperationSessionActiveSlice);
+  const [ouvertureTime,setOuvertureTime] = useState(0);
   const dispatch = useDispatch();
+
+  useEffect(()=>{
+    
+    
+    
+  },[
+    dispatch
+])
 
   return (
     <header className="sticky top-0 bg-white border-b border-slate-200 z-30">
@@ -44,8 +58,12 @@ function CaisseHeader({
 
           {/* Header: Right side */}
           <div className='mr-4'>
-              <h2 className='text-red-500 text-bold'>Référence Caisse : {ouvrirSessionCaisseState.currentCaisseId} </h2>
-              <h4>Ouverture : </h4>
+              <h2 className='text-orange-500 text-bold'>Référence Caissier : {recuperationSessionActiveState.entities?.userId ?? ""} </h2>
+              <div className='flex row'>
+              <h4>Ouverture : {recuperationSessionActiveState?.day.toString().padStart(2, '0')}-{recuperationSessionActiveState?.month.toString().padStart(2, '0')}-{recuperationSessionActiveState?.year} à {recuperationSessionActiveState?.hour.toString().padStart(2, '0')}:{recuperationSessionActiveState?.minutes.toString().padStart(2, '0')}:{recuperationSessionActiveState?.second.toString().padStart(2, '0')} </h4>
+              <h4 className='ml-12 text-green-500'>Etat : {recuperationSessionActiveState.entities?.active ? "active" : ""} </h4>
+              </div>
+              
             </div>
             
             <Button loading={ouvrirSessionCaisseState.ouvertureSessionModalOpen} onClick={()=>dispatch(setOuvertureSessionModalOpen(true))} label="Fermer la caisse"  raised/>

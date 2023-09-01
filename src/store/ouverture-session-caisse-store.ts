@@ -18,6 +18,7 @@ export interface SessionCaisseState{
     currentCaisseId : string | null | undefined,
     loading : 'idle' | 'pending' | 'succeded' | 'failed',
 
+
   
 }
 
@@ -26,6 +27,7 @@ export const initialStateOfSessionCaisse : SessionCaisseState = {
     currentCaisseId : null,
     entities : [],
     loading : 'idle',
+
     
 }
 

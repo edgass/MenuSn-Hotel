@@ -7,6 +7,7 @@ import { Button } from 'primereact/button';
 import { useAppSelector } from '../hook';
 import { useDispatch } from 'react-redux';
 import { ouvrirSessionCaisse, setOuvertureSessionModalOpen } from '../store/ouverture-session-caisse-store';
+import { auth } from '../firebase.config';
 
 function CaisseHeader({
   sidebarOpen,
@@ -58,15 +59,26 @@ function CaisseHeader({
 
           {/* Header: Right side */}
           <div className='mr-4'>
-              <h2 className='text-orange-500 text-bold'>Référence Caissier : {recuperationSessionActiveState.entities?.userId ?? ""} </h2>
-              <div className='flex row'>
-              <h4>Ouverture : {recuperationSessionActiveState?.day.toString().padStart(2, '0')}-{recuperationSessionActiveState?.month.toString().padStart(2, '0')}-{recuperationSessionActiveState?.year} à {recuperationSessionActiveState?.hour.toString().padStart(2, '0')}:{recuperationSessionActiveState?.minutes.toString().padStart(2, '0')}:{recuperationSessionActiveState?.second.toString().padStart(2, '0')} </h4>
+           { 
+           recuperationSessionActiveState.entities !== null & recuperationSessionActiveState.entities !== undefined & recuperationSessionActiveState.entities?.userId == auth.currentUser?.uid ? 
+           <div>
+            <h2 className='text-orange-500 text-bold'>Référence Caissier : {recuperationSessionActiveState.entities?.userId ?? ""} </h2>
+              <div className='flex justify-between'>
+              <h4 className='mr-6'>Ouverture : {recuperationSessionActiveState?.day.toString().padStart(2, '0')}-{recuperationSessionActiveState?.month.toString().padStart(2, '0')}-{recuperationSessionActiveState?.year} à {recuperationSessionActiveState?.hour.toString().padStart(2, '0')}:{recuperationSessionActiveState?.minutes.toString().padStart(2, '0')}:{recuperationSessionActiveState?.second.toString().padStart(2, '0')} </h4>
+              <h4>Fond de Caisse : {recuperationSessionActiveState.entities.fondDeCaisse} FCFA </h4>
               <h4 className='ml-12 text-green-500'>Etat : {recuperationSessionActiveState.entities?.active ? "active" : ""} </h4>
               </div>
               
+            </div> 
+            : null
+            }
+            
             </div>
             
-            <Button loading={ouvrirSessionCaisseState.ouvertureSessionModalOpen} onClick={()=>dispatch(setOuvertureSessionModalOpen(true))} label="Fermer la caisse"  raised/>
+            { recuperationSessionActiveState.entities !== null & recuperationSessionActiveState.entities !== undefined & recuperationSessionActiveState.entities?.userId == auth.currentUser?.uid ? 
+              <Button loading={ouvrirSessionCaisseState.ouvertureSessionModalOpen} onClick={()=>dispatch(setOuvertureSessionModalOpen(true))} label="Fermer la caisse"  raised/> 
+              : null
+            }
           <div className="flex items-center">
 
             <button

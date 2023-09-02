@@ -2,6 +2,7 @@ import db from "../firebase.config";
 import { getFirestore, collection, addDoc,query, where, getDocs, deleteDoc, doc, getDoc  } from "firebase/firestore";
 import { HotelModel } from "../models/hotel-model";
 import { CategoryModel } from "../models/category";
+import { FoodModel } from "../models/food-model";
 
 
 //const elementsCollectionRef = collection(db, "elements");
@@ -250,7 +251,7 @@ return visibility;
            var data= await resp.get();
        
                data.docs.forEach(item=>{
-                   console.log(item.id)
+                   
                   elements = [...elements,new CategoryModel(item.id,item.data().name,item.data().position)] as CategoryModel[];
             //  var element : Element = new Element(item.id,item.data().name,item.data().userId,item.data().name,item.data().prix,item.data().image,item.data().description);
               //   elements = [...elements,element] as Element[];

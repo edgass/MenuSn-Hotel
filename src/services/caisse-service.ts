@@ -1,8 +1,9 @@
-import db from "../firebase.config";
+import db, { auth } from "../firebase.config";
 import { getFirestore, collection, addDoc,query, where, getDocs, deleteDoc, doc, getDoc  } from "firebase/firestore";
 import { HotelModel } from "../models/hotel-model";
 import { CategoryModel } from "../models/category";
 import { SessionCaisseModel } from "../models/session-caisse-model";
+import Swal from "sweetalert2";
 
 
 //const elementsCollectionRef = collection(db, "elements");
@@ -47,7 +48,7 @@ async getActiveSession() : Promise<SessionCaisseModel | undefined>{
           if(!data.empty){
             var activeSession = data.docs[0].data();
             console.log(activeSession)
-            return new SessionCaisseModel(activeSession.active,activeSession.fermetureTimestamp,activeSession.ouvertureTimestamp,activeSession.fondDeCaisse,activeSession.userId)
+            return new SessionCaisseModel(data.docs[0].id, activeSession.active,activeSession.fermetureTimestamp,activeSession.ouvertureTimestamp,activeSession.fondDeCaisse,activeSession.userId,activeSession.hotelId,activeSession.caisseId)
             
           }else{
             return undefined;
@@ -136,17 +137,18 @@ return visibility;
       }
   }
 
-  async activateFood(foodId:string, activate:boolean){
+  async closeSessionCaisse(caisseId:string){
      
      try{
-      console.log(foodId);
+      console.log(caisseId);
           // Ajouter un nouveau document à la collection "commandes"
-          let docSnap = db.collection("elements").doc(foodId);
+          let docSnap = db.collection("session").doc(caisseId);
           console.log(docSnap.id)
         
-
+          const timestamp = new Date().getTime();
           docSnap.update({
-           visible : activate,
+           active : false,
+           fermetureTimestamp : timestamp
        })
        .then((e) => {
            console.log("Document successfully updated!", e);
@@ -204,29 +206,44 @@ return visibility;
     });
   }
 
-    async postNewCaisse(userId:string){
+    async postNewCaisse(hotelId:string,userId:string,fondCaisse:number){
        
       try{
 
-        this.getActiveSession().then((session)=>{
-          if(session == undefined || session == null){
-            return null;
+        this.getActiveSession().then(async(session)=>{
+         if(session !== null && session !== undefined){
+          if(session.userId !== auth.currentUser?.uid){
+            Swal.fire({
+              position: 'top-end',
+              icon: 'error',
+              title: "Impossible d'ouvrir une caisse car l'utilisateur précedent n'a pas encore fermé sa caisse",
+              showConfirmButton: false,
+              timer: 5000
+            })
+            return ;
+
+          }else{
+            return;
           }
+         }else{
+          const timestamp = new Date().getTime();
+          const docRef = await addDoc(collection(db, "session"), {
+            
+            ouvertureTimestamp : timestamp,
+            fermetureTimestamp : -1,
+            active : true,
+            userId : userId,
+            fondDeCaisse : fondCaisse,
+            hotelId:hotelId
+              
+            });
+        
+            console.log("Session créée avec succès !", docRef.id);
+            return docRef.id;
+         }
         })
         
-        const timestamp = new Date().getTime();
-  const docRef = await addDoc(collection(db, "session"), {
-    
-    ouvertureTimestamp : timestamp,
-    fermetureTimestamp : -1,
-    active : true,
-    userId : userId,
-    fondDeCaisse : -1
       
-    });
-
-    console.log("Session créée avec succès !", docRef.id);
-    return docRef.id;
       }catch(e){
           console.log(e);
       

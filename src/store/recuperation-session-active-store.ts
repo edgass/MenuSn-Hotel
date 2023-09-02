@@ -52,7 +52,9 @@ export const recuperationSessionActiveSlice = createSlice({
     name: 'activateFood',
     initialState: initialStateOfRecuperationSessionActive,
     reducers: {
-    
+        setSessionActive:(state,action)=>{
+            state.entities = action.payload
+        }
     },
      extraReducers : (builder) =>{
        
@@ -85,5 +87,5 @@ export const recuperationSessionActiveSlice = createSlice({
 
 
 export default recuperationSessionActiveSlice.reducer;
-export const {} = recuperationSessionActiveSlice.actions
+export const {setSessionActive} = recuperationSessionActiveSlice.actions
 

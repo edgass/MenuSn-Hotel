@@ -4,6 +4,13 @@ import commandService from "../services/command_service";
 import CommandModel from "../models/command_model";
 
 
+export interface PostNewCommandCredentials {
+    hotelId : string;
+     emplacement : string;
+     caisseId : string;
+   }
+
+   
 export interface PostNewCommandState{
     entities : SingleElementInCommande[],
     loading : 'idle' | 'pending' | 'succeded' | 'failed',
@@ -21,10 +28,11 @@ export const initialStateOfCommand : PostNewCommandState = {
 }
 
 export const postNewCommand = createAsyncThunk(
-    'command/newCommand',
-    async (_,{rejectWithValue})=>{
+    'command/postnewCommand',
+    async (arg:PostNewCommandCredentials,{rejectWithValue})=>{
         try{
-            return await commandService.postNewCommand("hjcscsd","Table 6");
+            console.log("post new command in state console")
+            return await commandService.postNewCommand(arg.hotelId,arg.emplacement,arg.caisseId);
         }catch(err){
             return rejectWithValue([]);
         }

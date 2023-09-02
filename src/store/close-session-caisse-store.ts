@@ -7,40 +7,39 @@ import { SessionCaisseModel } from "../models/session-caisse-model";
 import { recupererSessionActive } from "./recuperation-session-active-store";
 import { useDispatch } from "react-redux";
 
-export interface PostNewCaisseCredentials {
-   hotelId : string;
-    userId : string;
-    fondCaisse : number;
+export interface ActivationCommandCredentials {
+   commandId : string;
+    state : string;
   }
 
 
 
-export interface SessionCaisseState{
+export interface CloseSessionCaisseState{
     entities : SessionCaisseModel[],
-    ouvertureSessionModalOpen : boolean,
-    currentCaisseId : string | null | undefined,
+
+
     loading : 'idle' | 'pending' | 'succeded' | 'failed',
 
 
   
 }
 
-export const initialStateOfSessionCaisse : SessionCaisseState = {
-    ouvertureSessionModalOpen : false,
-    currentCaisseId : null,
+export const initialCloseStateOfSessionCaisse : CloseSessionCaisseState = {
+
+
     entities : [],
     loading : 'idle',
 
     
 }
 
-export const ouvrirSessionCaisse = createAsyncThunk(
-    'food/activated',
-    async (arg:PostNewCaisseCredentials,{rejectWithValue})=>{
+export const closeSessionCaisse = createAsyncThunk(
+    'caisse/close',
+    async (arg:string,{rejectWithValue})=>{
     
         try{
         
-            return await caisseService.postNewCaisse(arg.hotelId,arg?.userId,arg.fondCaisse);
+            return await caisseService.closeSessionCaisse(arg ?? "");
            
         }catch(err){
             return rejectWithValue([]);
@@ -65,37 +64,34 @@ export const ouvrirSessionCaisse = createAsyncThunk(
 
 
 
-export const ouvrirSessionCaisseSlice = createSlice({
+export const closeSessionCaisseSlice = createSlice({
     name: 'activateFood',
-    initialState: initialStateOfSessionCaisse,
+    initialState: initialCloseStateOfSessionCaisse,
     reducers: {
-        setOuvertureSessionModalOpen :(state,action)=>{
-           state.ouvertureSessionModalOpen = action.payload;
-           
-            
-        }
+       
     },
      extraReducers : (builder) =>{
        
 
-        builder.addCase(ouvrirSessionCaisse.pending,(state)=>{
+        builder.addCase(closeSessionCaisse.pending,(state)=>{
             state.loading = 'pending'
         });
 
         
-        builder.addCase(ouvrirSessionCaisse.rejected,(state)=>{
+        builder.addCase(closeSessionCaisse.rejected,(state)=>{
             state.loading = 'failed'
           //  state.errorMessage = action;
             
         });
 
-        builder.addCase(ouvrirSessionCaisse.fulfilled,(state,action)=>{
-            state.loading = 'succeded'
+        builder.addCase(closeSessionCaisse.fulfilled,(state,action)=>{
+            state.loading = 'succeded',
+            recupererSessionActive
         });
     } 
 })
 
 
-export default ouvrirSessionCaisseSlice.reducer;
-export const {setOuvertureSessionModalOpen} = ouvrirSessionCaisseSlice.actions
+export default closeSessionCaisseSlice.reducer;
+export const {} = closeSessionCaisseSlice.actions
 

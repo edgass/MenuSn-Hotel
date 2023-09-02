@@ -4,6 +4,7 @@ import { CategoryModel } from "../models/category";
 import { FoodModel } from "../models/food-model";
 import Command, { CommandModel } from "../models/command_model";
 import Swal from 'sweetalert2'
+import { useAppSelector } from "../hook";
 
 
 //const elementsCollectionRef = collection(db, "elements");
@@ -12,10 +13,9 @@ import Swal from 'sweetalert2'
 export class CommandService{
 
     
-
-    
    // async postNewCommand(hotelId:string,tableId:String,) : Promise<Element[]>{
-    async postNewCommand(hotelId:string,tableId:String,){
+    async postNewCommand(hotelId:string,emplacement:String,caisseId:string){
+        
         var elements : CommandModel[] = [];
         const storedValue = localStorage.getItem("commandInCaisse");
         if(storedValue !== null && storedValue !== ""){
@@ -24,13 +24,16 @@ export class CommandService{
    
     try{
          // Ajouter un nouveau document à la collection "commandes"
+         var timeStamp = new Date().getTime();
 const docRef = await addDoc(collection(db, "commande"), {
     hotelId:"dkzhbzek",
-    emplacement: tableId,
+    emplacement: emplacement,
     printed:false,
     delivered: false,
     elements: elements,
-    state : "Attente"
+    state : "Attente",
+    caisseId: caisseId,
+    timeStamp : timeStamp
     
   });
 

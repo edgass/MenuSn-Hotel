@@ -1,4 +1,5 @@
 import React, { useState,useRef,useEffect } from 'react';
+import { setSessionActive } from '../../store/recuperation-session-active-store';
 import { recupererSessionActive } from '../../store/recuperation-session-active-store';
 
 import { Message } from 'primereact/message';
@@ -33,21 +34,14 @@ import CaisseElements from './CaissesElements';
 import { ChangeState } from './change-state';
 import Alert from '../../partials/header/alert';
 import CaisseHeader from '../../partials/Caisse-Header';
-import OuvertureCaisse from './Ouverture-Caisse-Modal';
 import NoCaisse from './no-caisse';
+import db, { auth } from '../../firebase.config';
+import { SessionCaisseModel } from '../../models/session-caisse-model';
+import OuvertureCaisse from './fermeture-caisse/fermeture-Caisse-Modal';
         
 
 function Caisse() {
 
-
-  
-
-  const toast = useRef(null);
-
-  const displayMessage = (severity,summary,details,life) => {
-     toast.current.show({ severity: severity, summary: summary, detail: details, life: life });
-
-}
   const dispatch = useDispatch();
   const fetchState = useAppSelector(state=>state.fetchFoodSlice);
   const changeStateState = useAppSelector(state=>state.fetchCommandSlice);
@@ -60,14 +54,29 @@ function Caisse() {
   const recuperationSessionActiveState = useAppSelector(state=>state.recuperationSessionActiveSlice);
 
   useEffect(()=>{
-    dispatch(recupererSessionActive());
+/*
+
+    const resp = db.collection("session")
+    var data=  resp.where('active' ,'==', true).onSnapshot((snap)=>{
+      var activeSession = snap.docs[0].data();
+      if(activeSession !== null & activeSession !== undefined){
+      dispatch(setSessionActive(new SessionCaisseModel(snap.docs[0].id, activeSession.active,activeSession.fermetureTimestamp,activeSession.ouvertureTimestamp,activeSession.fondDeCaisse,activeSession.userId)))
+    }else{
+      return undefined;
+    }
+    })
+*/
+
+    dispatch(recupererSessionActive())
+    
     dispatch(fetchFoods());
     dispatch(fetchCategory());
-    
-  },[
-    dispatch
-])
+  }
 
+,[
+    dispatch
+]
+)
   return (
     
     
@@ -87,7 +96,7 @@ function Caisse() {
       <CaisseHeader sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
      
      {
-      recuperationSessionActiveState.entities !== null & recuperationSessionActiveState.entities !== undefined ? 
+      recuperationSessionActiveState.entities !== null & recuperationSessionActiveState.entities !== undefined & recuperationSessionActiveState.entities?.userId == auth.currentUser?.uid ? 
     
       <div className="h-screen">
         <div class="p-3 grid gap-4 grid-cols-3 myGrid">

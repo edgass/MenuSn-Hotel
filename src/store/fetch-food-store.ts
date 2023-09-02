@@ -26,7 +26,7 @@ export const initialStateFetchCategory : FetchElementState = {
 
 
 export const fetchFoods = createAsyncThunk(
-    'food/fetch',
+    'food/fetchfood',
     async (credential:ElementCredentials,{rejectWithValue})=>{
         try{
         

@@ -23,6 +23,7 @@ import UpdateFood2 from '../update-food';
 import { fetchCategory } from '../../store/fetch-category-store';
 import SingleElementInNewCommand from './single-element-in -newCommand';
 import { postNewCommand } from '../../store/post-command-store';
+import { Button } from 'primereact/button';
         
 
 function NewCommand() {
@@ -39,12 +40,7 @@ function NewCommand() {
   const dispatch = useDispatch();
   const changeCommandeState = useAppSelector(state=>state.changeCommandStateSlice);
   const postNewCommandState = useAppSelector(state=>state.postCommandSlice);
-  const deleteState = useAppSelector(state=>state.deleteFoodSlice);
-  const [sidebarOpen, setSidebarOpen] = useState(false);
-  const [visible, setVisible] = useState(false);
-  const [updateFoodVisible, setUpdateFoodVisible] = useState(false);
-  const [deleteFoodVisible, setDeleteFoodVisible] = useState(false);
-  const [foodToUpdate, setFoodToUpdate] = useState(new FoodModel('','','','','',0));
+  const recuperationSessionActiveState = useAppSelector(state=>state.recuperationSessionActiveSlice);
   const [PT, setPT] = useState(0);
 
   useEffect(()=>{
@@ -72,9 +68,12 @@ function NewCommand() {
     <h4 class="mb-2 ml-2 float-left">Nouvelle Commande</h4>
     {
         changeCommandeState.commandInCaisseEntities.length>0 ? 
-        postNewCommandState.loading === "pending" ?
+        postNewCommandState.loading ==="pending" ?
         <h4 className='float-right'>En cours d'envoie...</h4> : 
-        <button onClick={()=>dispatch(postNewCommand())} class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded float-right">Valider Commande</button> : null
+        <div class="py-2 px-4 float-right">
+            <Button onClick={()=>{dispatch(postNewCommand({hotelId:"",emplacement:"Table 7",caisseId:recuperationSessionActiveState.entities.id}))}} >Valider Commande</Button> 
+        </div>
+        : null
     }
    
     </div>

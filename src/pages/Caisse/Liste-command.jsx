@@ -24,6 +24,7 @@ import UpdateFood2 from '../update-food';
 import { fetchCategory } from '../../store/fetch-category-store';
 import { fetchCommand } from '../../store/fetch-command-store';
 import SingleCommand from './single-command';
+import { Timestamp } from 'firebase/firestore';
         
 
 function ListeCommand() {
@@ -38,6 +39,7 @@ function ListeCommand() {
   const [deleteFoodVisible, setDeleteFoodVisible] = useState(false);
   const [listOfCommandToShow, setListOfCommandToShow] = useState([]);
   const [listOfCommandFromDatase, setListOfCommandFromDatabase] = useState([]);
+  const recuperationSessionActiveState = useAppSelector(state=>state.recuperationSessionActiveSlice)
 
 
 
@@ -58,13 +60,15 @@ function ListeCommand() {
   }
 
   useEffect(()=>{
-   
-db.collection("commande").orderBy("state")
+   console.log(recuperationSessionActiveState.entities.id)
+   //db.collection("commande").where("caisseId","=",recuperationSessionActiveState.entities?.id ?? "").where("hotelId","=",recuperationSessionActiveState.entities?.hotelId).orderBy("state").orderBy("timeStamp")
+   db.collection("commande").where("caisseId","==",recuperationSessionActiveState.entities.id)
 .onSnapshot((snap) => {
+    
     setListOfCommandToShow([])
     setListOfCommandFromDatabase([])
     snap.forEach((doc) => {
-      
+        console.log
         setListOfCommandFromDatabase(arr=>[...arr,doc]);
         setListOfCommandToShow(arr=>[...arr,doc]);
         

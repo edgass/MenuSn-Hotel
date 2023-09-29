@@ -56,10 +56,10 @@ function CaisseActions() {
 
       <div className="">
         <div class="grid md:grid-cols-3 md:grid-cols-2 lg:grid-cols-3">
-          <div class="bg-green-500 rounded-md m-3 "><p class="px-7 py-8 text-center text-white">Fond de Caisse</p></div>
-          <div onClick={()=>dispatch(removeAllElementInCommand())} class="bg-green-500 rounded-md m-3"><p  class="px-7 py-8 text-center text-white">Nouvelle Commande</p></div>
-          <div class="bg-green-500 rounded-md m-3"><p class="px-7 py-8 text-center text-white">Fond de Caisse</p></div>
-          <div class="bg-green-500 rounded-md m-3"><p class="px-7 py-8 text-center text-white">Fond de Caisse</p></div>
+          <div onClick={()=>dispatch(removeAllElementInCommand())} class="bg-blue-400 rounded-md m-3"><p  class="px-7 py-8 text-center text-white">Nouvelle Commande</p></div>
+          <div class="bg-green-500 rounded-md m-3"><p class="px-7 py-8 text-center text-white">Entrée</p></div>
+          <div class="bg-orange-400 rounded-md m-3"><p class="px-7 py-8 text-center text-white">Sortie</p></div>
+          <div class="bg-pink-400 rounded-md m-3"><p class="px-7 py-8 text-center text-white">Relicat</p></div>
         </div>
       </div>
  

@@ -48,7 +48,7 @@ async getActiveSession() : Promise<SessionCaisseModel | undefined>{
           if(!data.empty){
             var activeSession = data.docs[0].data();
             console.log(activeSession)
-            return new SessionCaisseModel(data.docs[0].id, activeSession.active,activeSession.fermetureTimestamp,activeSession.ouvertureTimestamp,activeSession.fondDeCaisse,activeSession.userId,activeSession.hotelId,activeSession.caisseId)
+            return new SessionCaisseModel(data.docs[0].id, activeSession.active,activeSession.fermetureTimestamp,activeSession.ouvertureTimestamp,activeSession.fondDeCaisse,activeSession.userId,activeSession.hotelId)
             
           }else{
             return undefined;

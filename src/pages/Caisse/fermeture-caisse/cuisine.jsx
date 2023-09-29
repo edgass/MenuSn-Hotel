@@ -5,7 +5,7 @@ import { useDispatch } from "react-redux";
 import { useAppSelector } from "../../../hook";
 import SingleCommandeInFermetureCaisse from "./single-command-in-fermeture-caisse";
 
-function Payed() {
+function Cuisine() {
   const [total,setTotal] = useState(null)
   const ouvrirSessionCaisseState = useAppSelector(state=>state.ouvrirSessionCaisseSlice);
   const closeSessionCaisseState = useAppSelector(state=>state.closeSessionCaisseSlice);
@@ -25,7 +25,7 @@ function Payed() {
     var sousTotal = 0;
     for(let i=0;i<fetchCommandState.entities.length;i++){
      
-      if(fetchCommandState.entities[i].state == "Payé"){
+      if(fetchCommandState.entities[i].state == "Cuisine"){
         for(let j=0;j<fetchCommandState.entities[i].elements.length;j++){
          
           console.log(fetchCommandState.entities[i].elements[j].element)
@@ -48,13 +48,13 @@ function Payed() {
 
 
     <div className="w-full">
-      <h1 className="text-green-500 text-bold m-3 text-xl">Payés</h1>
+      <h1 className="text-green-500 text-bold m-3 text-xl">Cuisine</h1>
       <div className="">
         {
           fetchCommandState.loading == "pending" ?
           <p>Recuperation des donneés</p>:
           fetchCommandState.entities.map((cmd)=>{
-            if(cmd.state == "Payé" | cmd.state == "payé")
+            if(cmd.state == "Cuisine" | cmd.state == "cuisine")
               return(
                 <SingleCommandeInFermetureCaisse cmd = {cmd} />
               )
@@ -70,4 +70,4 @@ function Payed() {
 }
 
 
-export default Payed;
+export default Cuisine;

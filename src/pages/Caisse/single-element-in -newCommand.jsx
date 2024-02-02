@@ -2,6 +2,7 @@ import React, { useState,useRef,useEffect } from 'react';
 import { setSelectedElement } from '../../store/change-command-state-store';
 import './Caisse.css';
 import { setChangeStateVisible } from '../../store/fetch-command-store';
+import { InputText } from 'primereact/inputtext';
 
 import Sidebar from '../../partials/Sidebar';
 import Header from '../../partials/Header';
@@ -58,12 +59,14 @@ function SingleElementInNewCommand(props) {
 
             <tr onClick={()=>dispatch(setSelectedElement(props.element.element))} 
            
-            class=  {props.element.element.name == changeCommandeState.selectedElement.name && props.element.element.prix == changeCommandeState.selectedElement.prix ? "bg-blue-100 border-b dark:bg-gray-800 dark:border-orange-700" : "bg-white border-b dark:bg-gray-800 dark:border-orange-700"}>
+            class=  {props.element.element.name == changeCommandeState.selectedElement.name && props.element.element.prix == changeCommandeState.selectedElement.prix ? "bg-blue-100 border-b dark:bg-red-500 dark:border-orange-700" : "bg-white border-b dark:bg-gray-800 dark:border-orange-700"}>
                  <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                     {props.element.element.name}
                 </th>
                 <td class="px-6 py-4">
-                {props.element.quantity}
+            
+                  <input type='text' style={{border: 'none',background: 'none', outline:'none',}} value={props.element.quantity}></input>
+                
                 </td>
                 <td class="px-6 py-4">
                 {props.element.element.prix} FCFA

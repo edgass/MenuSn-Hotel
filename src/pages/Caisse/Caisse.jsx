@@ -2,6 +2,7 @@ import React, { useState,useRef,useEffect } from 'react';
 import { setSessionActive } from '../../store/recuperation-session-active-store';
 import { recupererSessionActive } from '../../store/recuperation-session-active-store';
 
+
 import { Message } from 'primereact/message';
         
 
@@ -53,7 +54,7 @@ function Caisse() {
   const ouvrirSessionCaisseState = useAppSelector(state=>state.ouvrirSessionCaisseSlice);
   const recuperationSessionActiveState = useAppSelector(state=>state.recuperationSessionActiveSlice);
 
-  useEffect(()=>{
+  useEffect(()=> {
 /*
 
     const resp = db.collection("session")
@@ -67,14 +68,18 @@ function Caisse() {
     })
 */
 
-    dispatch(recupererSessionActive())
+   dispatch(recupererSessionActive())
     
     dispatch(fetchFoods());
     dispatch(fetchCategory());
+    const user = auth.currentUser;
+    console.log("La session active dans le state est : "+user)
+    
+
   }
 
 ,[
-    dispatch
+   
 ]
 )
   return (
@@ -96,7 +101,9 @@ function Caisse() {
       <CaisseHeader sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
      
      {
-      recuperationSessionActiveState.entities !== null & recuperationSessionActiveState.entities !== undefined & recuperationSessionActiveState.entities?.userId == auth.currentUser?.uid ? 
+      recuperationSessionActiveState.loading == "pending" ?
+     <div className='h-screen p-align-center'><ProgressSpinner /></div> :
+     recuperationSessionActiveState.entities !== null & recuperationSessionActiveState.entities !== undefined & recuperationSessionActiveState.entities?.userId == auth.currentUser?.uid ? 
     
       <div className="h-screen">
         <div class="p-3 grid gap-4 grid-cols-3 myGrid">

@@ -41,7 +41,7 @@ const docRef = await addDoc(collection(db, "commande"), {
   Swal.fire({
     position: 'top-end',
     icon: 'success',
-    title: 'Your work has been saved',
+    title: 'Votre commande a été crée',
     showConfirmButton: false,
     timer: 1500
   })

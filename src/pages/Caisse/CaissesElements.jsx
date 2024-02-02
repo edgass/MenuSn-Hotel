@@ -1,5 +1,5 @@
 import React, { useState,useRef,useEffect } from 'react';
-import { setSelectedElement, setCommand } from '../../store/change-command-state-store';
+import {setBackSpaceDelete, setSelectedElement, setCommand } from '../../store/change-command-state-store';
 
 import './Caisse.css';
 
@@ -58,7 +58,7 @@ function CaisseElements() {
 
                                                 return(
                                                   <div key={tab[0].id} onClick={()=>{
-                                                    dispatch(setCommand(new SingleElementInCommande(tab[0],1)));
+                                                    dispatch(setCommand(new SingleElementInCommande(tab[0],1,true)));
                                                     dispatch(setSelectedElement(tab[0]))
                                                   }} class="bg-zinc-200 rounded-md m-3 ">
                                                   <img src={tab[0].imagepath} class="object-cover h-24 w-48"/>

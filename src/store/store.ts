@@ -4,6 +4,7 @@ import storage from 'redux-persist/lib/storage'
 import {persistReducer} from 'redux-persist'
 import thunk from 'redux-thunk';
 import addFoodSlice from './food-store';
+import updateFoodSlice from './update-food-store';
 import fetchCategorySlice from './fetch-category-store';
 import  fetchFoodSlice  from './fetch-food-store';
 import  deleteFoodSlice  from './delete-food-store';
@@ -17,6 +18,7 @@ import closeSessionCaisseSlice from './close-session-caisse-store';
 const reducers = combineReducers({
   authSlice,
   addFoodSlice,
+  updateFoodSlice,
   fetchCategorySlice,
   fetchFoodByCategorySlice,
   fetchCommandSlice,

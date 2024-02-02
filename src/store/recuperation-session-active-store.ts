@@ -80,6 +80,7 @@ export const recuperationSessionActiveSlice = createSlice({
             state.hour = date.getHours(),
             state.minutes = date.getMinutes(),
             state.second = date.getSeconds()
+            
            
         });
     } 

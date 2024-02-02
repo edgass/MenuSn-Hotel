@@ -236,7 +236,7 @@ return visibility;
         const hotel = new HotelModel(hotelData?.id,hotelData.data()?.nom,hotelData.data()?.tel);
 
   
-      console.log(hotel)
+      console.log("Hotel retrouvé : "+hotel)
     //  console.log(querySnapshot.docs[0]?.data().hotelId);
     // hotel = (querySnapshot.docs[0]?.id,querySnapshot.docs[0]?.data().name,querySnapshot.docs[0]?.data().tel)
       return hotel ;

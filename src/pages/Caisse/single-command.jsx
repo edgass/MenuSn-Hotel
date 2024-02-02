@@ -23,6 +23,7 @@ import { ConfirmDeleteFoodModal } from '../confirm_delete_food_modal';
 import UpdateFood2 from '../update-food';
 import { fetchCategory } from '../../store/fetch-category-store';
 import { fetchCommand } from '../../store/fetch-command-store';
+import {setNewNumberTyping  } from '../../store/change-command-state-store';
         
 
 function SingleCommand(props) {
@@ -53,7 +54,10 @@ function SingleCommand(props) {
 
   return (
 
-            <tr onClick={()=>dispatch(setChangeStateVisible([true,props.command]))} class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+            <tr onClick={()=>{
+              dispatch(setNewNumberTyping(true))
+              dispatch(setChangeStateVisible([true,props.command]))
+            }} class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
                 <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                    {props.command.id}
                 </th>

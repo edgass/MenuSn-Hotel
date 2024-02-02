@@ -1,5 +1,8 @@
 import React, { useState,useRef,useEffect } from 'react';
 import { setCurrentQuantity,changeCurrentElementQuantity } from '../../store/change-command-state-store';
+import {setBackSpaceDelete,setNewNumberTyping,setCommand, removeItem } from '../../store/change-command-state-store';
+import SingleElementInCommande from '../../models/single-element-in-command';
+import 'primeicons/primeicons.css';
 
 import './Caisse.css';
 
@@ -60,13 +63,23 @@ function NumPad() {
          { numPad.map((element) => {
           return(
             <div onClick={()=>{
-             dispatch(setCurrentQuantity(element));
+          
+           dispatch(setCommand(new SingleElementInCommande(changeCommandeState.selectedElement,parseInt(element),false)));
+           if(changeCommandeState.newNumberTyping){
+            dispatch(setNewNumberTyping(false));
+            
+           }
             }} class="bg-slate-400 px-7 py-8"><p class="px-3 text-center text-white">{element}</p></div>
           )
           })}
         
-          <div class="bg-blue-400 px-7 py-8"><p class="px-3 text-center text-white">Reinitialiser</p></div>
-          <div onClick={()=>{dispatch(changeCurrentElementQuantity(parseInt(changeCommandeState.currentQtt)))}} class="bg-sky-700 px-7 py-8"><p class="px-3 text-center text-white">Valider</p></div>
+          <div onClick={()=>{
+          dispatch(setBackSpaceDelete(true))
+          dispatch(setCommand(new SingleElementInCommande(changeCommandeState.selectedElement,1,false)))
+          dispatch(setBackSpaceDelete(false))
+          }} class="bg-slate-500 px-7 py-8"><p class="px-3 text-center text-white"><i className="pi pi-arrow-left" style={{ fontSize: '1rem' }}></i></p></div>
+          <div onClick={()=>{dispatch(removeItem(changeCommandeState.selectedElement))}} class="bg-red-700 px-7 py-8"><p class="px-3 text-center text-white">Supprimer</p></div>
+        
         </div>
       </div>
  

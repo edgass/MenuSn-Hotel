@@ -17,6 +17,8 @@ export interface ChangeCommandStateState{
     commandInCaisseEntities: SingleElementInCommande[],
     currentQtt :string,
     selectedElement : FoodModel | null
+    newNumberTyping: boolean,
+    backSpaceDelete: boolean,
     loading : 'idle' | 'pending' | 'succeded' | 'failed',
 
   
@@ -25,6 +27,8 @@ export interface ChangeCommandStateState{
 export const initialStateOfAddFood : ChangeCommandStateState = {
     commandInCaisseEntities : [],
     selectedElement: new FoodModel("","","","","",0,""),
+    newNumberTyping : true,
+    backSpaceDelete : false,
     currentQtt : "",
     entities : [],
     loading : 'idle',
@@ -64,6 +68,13 @@ export const changeCommandStateSlice = createSlice({
     name: 'activateFood',
     initialState: initialStateOfAddFood,
     reducers: {
+        setBackSpaceDelete : (state,action)=>{
+            state.backSpaceDelete = action.payload
+        },
+        setNewNumberTyping :(state,action)=>{
+           state.newNumberTyping = action.payload
+            
+        },
         getCommand :(state,action)=>{
             const storedValue = localStorage.getItem("commandInCaisse");
             if(storedValue !== null && storedValue !== ""){
@@ -85,12 +96,45 @@ export const changeCommandStateSlice = createSlice({
                     const actualValues = JSON.parse(storedValue ?? "");
                     const element = actualValues.find((el: { element: { name: any; prix: any; }; }) => el.element.name === action.payload.element.name && el.element.prix === action.payload.element.prix);
                     if(element !== null && element !== undefined){
-                        console.log(element)
+            
                         actualValues.map((item: SingleElementInCommande)=>{
                             if(item.element.name === action.payload.element.name && item.element.prix === action.payload.element.prix){
                                 console.log("it exist")
-                                const newQtt = item.quantity+action.payload.quantity
-                                const newValueOfExistedElementInCommand = new SingleElementInCommande(action.payload.element,parseInt(newQtt))
+                                let  newQtt = 0;
+                                if(action.payload.isSimpleAdd){
+                                     newQtt = item.quantity+action.payload.quantity
+                                     console.log("new simple add and new qtt is: "+newQtt)
+                            
+                                 }else{
+                                   
+                                  if(state.backSpaceDelete){
+                                    if(item.quantity>9){
+                                        console.log("Superieur a 9")
+                                        newQtt = Math.floor(item.quantity / 10);
+                                        console.log(newQtt)
+                                    }else{
+                                        state.newNumberTyping = true;
+                                        newQtt = 1;
+                                    }
+                                    
+                                  }else{
+                                
+                                    console.log(state.newNumberTyping)
+                                    if(state.newNumberTyping){
+                                    newQtt = action.payload.quantity
+                                    }else{
+                                        console.log("Concatenation")
+                                        var concatenedQtt = item.quantity.toString() +action.payload.quantity.toString();
+                                        newQtt = parseInt(concatenedQtt);
+                                    }
+                                    }
+
+                                  
+                              
+                        
+                                   
+                                }
+                                const newValueOfExistedElementInCommand = new SingleElementInCommande(action.payload.element,newQtt,true)
                                 state.commandInCaisseEntities = [...state.commandInCaisseEntities, newValueOfExistedElementInCommand]
                             }else{
                                 console.log("exist but is different")
@@ -123,8 +167,31 @@ export const changeCommandStateSlice = createSlice({
            
           //  console.log(state.elementToSearch);
         },
+       
+
+        removeItem :(state,action)=>{
+        
+                try {
+                    const storedValue = localStorage.getItem("commandInCaisse");
+                    if (storedValue !== null) {
+                        const actualValues = JSON.parse(storedValue);
+                        const updatedValues = actualValues.filter((item) => {
+                            console.log(action.payload.name);
+                            return !(item.element.name === action.payload.name && item.element.prix === action.payload.prix);
+                        });
+                        localStorage.removeItem("commandInCaisse");
+                        state.commandInCaisseEntities = [...updatedValues]
+                        localStorage.setItem("commandInCaisse", JSON.stringify(updatedValues));
+                    }
+                } catch (error) {
+                    console.log(error);
+                }
+          
+            
+        },
 
         setSelectedElement : (state,action)=> {
+            state.newNumberTyping = true;
             state.selectedElement = action.payload;
             console.log(state.selectedElement)
         },
@@ -143,7 +210,7 @@ export const changeCommandStateSlice = createSlice({
                     newElementCopyArray = [...newElementCopyArray,state.commandInCaisseEntities[i]];
                     
                 }else{
-                    newElementCopyArray = [...newElementCopyArray,new SingleElementInCommande(state.commandInCaisseEntities[i].element,action.payload)];
+                    newElementCopyArray = [...newElementCopyArray,new SingleElementInCommande(state.commandInCaisseEntities[i].element,action.payload,true)];
                     
                 }
             }
@@ -187,5 +254,5 @@ export const changeCommandStateSlice = createSlice({
 
 
 export default changeCommandStateSlice.reducer;
-export const {getCommand,setCommand,setSelectedElement,removeAllElementInCommand,changeCurrentElementQuantity,setCurrentQuantity} = changeCommandStateSlice.actions
+export const {setBackSpaceDelete,setNewNumberTyping,getCommand,setCommand,removeItem, setSelectedElement,removeAllElementInCommand,changeCurrentElementQuantity,setCurrentQuantity} = changeCommandStateSlice.actions
 

@@ -29,7 +29,8 @@ export default function UpdateFood(props){
 
 
     const dispatch = useDispatch();
-    const state = useAppSelector(state=>state.addFoodSlice);
+    //const state = useAppSelector(state=>state.addFoodSlice);
+    const state = useAppSelector(state=>state.updateFoodSlice);
     const categoryState = useAppSelector(state=>state.fetchCategorySlice);
     const authState = useAppSelector(state=>state.authSlice);
     const [files, setFiles] = useState([]);
